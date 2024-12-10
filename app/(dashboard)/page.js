@@ -248,7 +248,7 @@ const Home = () => {
 
           <Col xl={8} lg={12} md={12} xs={12}>
             {/* Teams */}
-            {/* <CustomAreaChart data={data} /> */}
+            <CustomAreaChart data={data} />
           </Col>
         </Row>
 
