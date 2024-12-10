@@ -1,0 +1,19 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_333_1219)">
+<circle cx="16.0553" cy="16.0554" r="11.5685" transform="rotate(56.0792 16.0553 16.0554)" fill="black"/>
+<mask id="mask0_333_1219" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="4" y="4" width="24" height="24">
+<circle cx="16.0553" cy="16.0554" r="11.5685" transform="rotate(56.0792 16.0553 16.0554)" fill="black"/>
+</mask>
+<g mask="url(#mask0_333_1219)">
+<path d="M27.7344 15.1299L27.7323 16.5994L14.5067 16.5811C14.1009 16.5806 13.7724 16.2511 13.773 15.8454V15.8454C13.7735 15.4396 14.1029 15.1111 14.5087 15.1116L27.7344 15.1299Z" fill="#D9D9D9"/>
+<path d="M12.5664 12.1267L16.3733 12.069C18.4758 12.0371 20.2061 13.7157 20.2379 15.8182V15.8182C20.2698 17.9207 18.5912 19.6509 16.4887 19.6828L12.6818 19.7405L12.5664 12.1267Z" fill="#F5F8E9"/>
+<rect x="10.416" y="17.6245" width="2.64473" height="0.93249" rx="0.466245" transform="rotate(-0.868555 10.416 17.6245)" fill="#F5F8E9"/>
+<rect x="10.3496" y="13.5469" width="2.64473" height="0.93249" rx="0.466245" transform="rotate(-0.868555 10.3496 13.5469)" fill="#F5F8E9"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_333_1219">
+<rect width="32" height="32" fill="white"/>
+</clipPath>
+</defs>
+</svg>

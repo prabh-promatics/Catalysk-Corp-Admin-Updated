@@ -50,6 +50,40 @@ export const DashboardMenu = [
 	},
 	// {
 	// 	id: uuid(),
+	// 	title: 'Sustainability Targets',
+	// 	icon: 'crosshair',
+	// 	link: '/pages/corporate-sustainability-targets'
+	// },
+	// {
+	// 	id: uuid(),
+	// 	title: 'Rewards Management',
+	// 	icon: 'award',
+	// 	link: '/pages/rewards-management'
+	// },
+	// {
+	// 	id: uuid(),
+	// 	title: 'Marketing Collateral',
+	// 	icon: 'download',
+	// 	link: '/pages/marketing-collateral'
+	// },
+	{
+		id: uuid(),
+		title: 'Admin Management',
+		icon: 'user-check',
+		link: '/pages/admin-management'
+	},
+	// {
+	// 	id: uuid(),
+	// 	title: 'Catalysk Management',
+	// 	icon: 'user',
+	// 	link: '/pages/catalysk-management'
+	// },
+
+
+
+	
+	// {
+	// 	id: uuid(),
 	// 	title: 'LAYOUTS & PAGES',
 	// 	grouptitle: true
 	// },
