@@ -2,7 +2,7 @@
 // import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import { useEffect, useState } from 'react'
 import { Container, Form, Card } from 'react-bootstrap'
-import { Input } from 'rsuite'
+//import { Input } from 'rsuite'
 import { PageHeading } from 'widgets'
 
 import Tab from 'react-bootstrap/Tab'

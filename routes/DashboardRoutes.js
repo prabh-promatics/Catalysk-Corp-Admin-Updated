@@ -66,12 +66,12 @@ export const DashboardMenu = [
 	// 	icon: 'download',
 	// 	link: '/pages/marketing-collateral'
 	// },
-	{
+/* 	{
 		id: uuid(),
 		title: 'Admin Management',
 		icon: 'user-check',
 		link: '/pages/admin-management'
-	},
+	}, */
 	// {
 	// 	id: uuid(),
 	// 	title: 'Catalysk Management',
@@ -99,16 +99,7 @@ export const DashboardMenu = [
 	// 		{ id: uuid(), link: '/not-found', name: '404 Error' }
 	// 	]
 	// },	
-	{
-		id: uuid(),
-		title: 'Authentication',
-		icon: 'lock',
-		children: [
-			{ id: uuid(), link: '/authentication/sign-in', name: 'Sign In' },
-			{ id: uuid(), link: '/authentication/sign-up', name: 'Sign Up' },
-			{ id: uuid(), link: '/authentication/forget-password', name: 'Forget Password'}			
-		]
-	},
+	
 	// {
 	// 	id: uuid(),
 	// 	title: 'Layouts',

@@ -1,86 +1,3 @@
-// 'use client'
-// // import node module libraries
-// import { Fragment } from "react";
-// import Link from 'next/link';
-// import { Container, Col, Row } from 'react-bootstrap';
-
-// // import widget/custom components
-// import { StatRightTopIcon } from "widgets";
-
-// // import sub components
-// import { ActiveProjects, Teams, 
-//     TasksPerformance 
-// } from "sub-components";
-
-// // import required data files
-// import ProjectsStatsData from "data/dashboard/ProjectsStatsData";
-
-// const Home = () => {
-//     return (
-//         <Fragment>
-//             <div className="bg-primary pt-10 pb-21"></div>
-//             <Container fluid className="mt-n22 px-6">
-//                 <Row>
-//                     <Col lg={12} md={12} xs={12}>
-//                         {/* Page header */}
-//                         <div>
-//                             <div className="d-flex justify-content-between align-items-center">
-//                                 <div className="mb-2 mb-lg-0">
-//                                     <h3 className="mb-0  text-white">Projects</h3>
-//                                 </div>
-//                                 <div>
-//                                     <Link href="#" className="btn btn-white">Create New Project</Link>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </Col>
-//                     {ProjectsStatsData.map((item, index) => {
-//                         return (
-//                             <Col xl={3} lg={6} md={12} xs={12} className="mt-6" key={index}>
-//                                 <StatRightTopIcon info={item} />
-//                             </Col>
-//                         )
-//                     })}
-//                 </Row>
-
-//                 {/* Active Projects  */}
-//                 <ActiveProjects />
-
-//                 <Row className="my-6">
-//                     <Col xl={4} lg={12} md={12} xs={12} className="mb-6 mb-xl-0">
-
-//                         {/* Tasks Performance  */}
-//                         <TasksPerformance />
-
-//                     </Col>
-//                     {/* card  */}
-//                     <Col xl={8} lg={12} md={12} xs={12}>
-
-//                         {/* Teams  */}
-//                         <Teams />
-
-//                     </Col>
-//                 </Row>
-//             </Container>
-//         </Fragment>
-//     )
-// }
-// export default Home;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 'use client'
 
 // import node module libraries
@@ -102,16 +19,11 @@ const Home = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Example chart data (unchanged from your original code)
-  const data = [
-    { name: '0', uv: 1000, pv: 1200, amt: 2400 },
-    { name: '7', uv: 1000, pv: 1400, amt: 2210 },
-    { name: '14', uv: 3000, pv: 1800, amt: 2290 },
-    { name: '28', uv: 3000, pv: 2200, amt: 2000 },
-    { name: '35', uv: 3000, pv: 2500, amt: 2181 },
-    { name: '42', uv: 8000, pv: 2700, amt: 2500 },
-    { name: '49', uv: 8000, pv: 2800, amt: 2100 }
-  ]
+  const [chartData, setChartData] = useState([]);
+  const [chartloading, setChartLoading] = useState(true);
+  const [chartError, setChartError] = useState(null);
+
+ 
 
   // Fetch data from the API
   useEffect(() => {
@@ -187,6 +99,68 @@ const Home = () => {
     fetchStats()
   }, [])
 
+
+  useEffect(() => {
+    const token = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('authToken='))
+      ?.split('=')[1]
+    const fetchChartData = async () => {
+      try {
+        // Get token from cookies
+        
+
+        // Fetch data from the API
+        const response = await fetch(
+          'https://betazone.promaticstechnologies.com/corporate/targetGraph',
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+
+        const { data } = await response.json();
+
+        // Transform the API data for the chart
+        const formattedData = [
+          {
+            name: 'Electricity',
+            pv: data.electricity_target,
+            uv: data.electicity_saved_till_now,
+            hv: data.electicity_total_saved,
+          },
+          {
+            name: 'Water',
+            pv: data.water_target,
+            uv: data.water_saved_till_now,
+            hv: data.water_total_saved,
+          },
+          {
+            name: 'Emission',
+            pv: data.emission_target,
+            uv: data.emission_saved_till_now,
+            hv: data.emission_total_saved,
+          },
+        ];
+
+        setChartData(formattedData);
+      } catch (err) {
+        setChartError(err.message);
+      } finally {
+        setChartLoading(false);
+      }
+    };
+
+    fetchChartData();
+  }, []);
+
+
   // Conditional rendering for API states
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error}</p>
@@ -236,19 +210,19 @@ const Home = () => {
             {/* Tasks Performance */}
             {/* <TasksPerformance /> */}
             <CustomBarChart
-                data={data1}
-                bar1Key='pv'
-                bar1Color='#8884d8'
-                bar2Key='uv'
-                bar2Color='#82ca9d'
-                bar3Key='hv'
-                bar3Color='#f8bb30'
-              />
+      data={chartData}
+      bar1Key="pv"
+      bar1Color="#8884d8"
+      bar2Key="uv"
+      bar2Color="#82ca9d"
+      bar3Key="hv"
+      bar3Color="#f8bb30"
+    />
           </Col>
 
           <Col xl={8} lg={12} md={12} xs={12}>
             {/* Teams */}
-            <CustomAreaChart data={data} />
+            <CustomAreaChart />
           </Col>
         </Row>
 

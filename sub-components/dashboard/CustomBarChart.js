@@ -1,73 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import CustomBarChart from './CustomBarChart';
+import React, { PureComponent } from 'react'
+import { Card, Dropdown } from 'react-bootstrap'
+import {
+  BarChart,
+  Bar,
+  Rectangle,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts'
 
-const ChartContainer = () => {
-  const [chartData, setChartData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+class CustomBarChart extends PureComponent {
+  render () {
+    const { data, bar1Key, bar1Color, bar2Key, bar2Color, bar3Key, bar3Color } = this.props
 
-  useEffect(() => {
-    // Parse the token from cookies
-    const token = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('authToken='))
-    ?.split('=')[1]
+    return (
+      <Card className='h-100'>
+        <Card.Body>
+          <div className='d-flex align-items-center justify-content-between mb-4'>
+            <div>
+              <h4 className='mb-0'>Active Visualization</h4>
+            </div>
+          </div>
+          <ResponsiveContainer width='100%' height={450}>
+            <BarChart
+              data={data}
+              margin={{
+                top: 5,
+                right: 0,
+                left: -60,
+                bottom: 5
+              }}
+              barCategoryGap={15}
+            >
+              {/* <CartesianGrid strokeDasharray='3 3' /> */}
+              <XAxis dataKey='name' />
+              <YAxis tick={false} axisLine={false} />
+              <Tooltip />
+              {/* <Legend /> */}
+              <Bar
+                dataKey={bar1Key}
+                fill={bar1Color}
+                activeBar={<Rectangle fill='pink' stroke='blue' />}
+              />
+              <Bar
+                dataKey={bar2Key}
+                fill={bar2Color}
+                activeBar={<Rectangle fill='gold' stroke='purple' />}
+              />
+              <Bar
+                dataKey={bar3Key}
+                fill={bar3Color}
+                activeBar={<Rectangle fill='lightgreen' stroke='purple' />}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card.Body>
+      </Card>
+    )
+  }
+}
 
-    if (!token) {
-      setError('Token not found. Please log in.');
-      setLoading(false);
-      return;
-    }
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          'https://betazone.promaticstechnologies.com/corporate/targetGraph',
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-
-        const { data } = await response.json();
-
-        // Transform data into chart-compatible format
-        const formattedData = [
-          { name: 'Electricity', Target: data.electricity_target, Saved: data.electicity_saved_till_now },
-          { name: 'Water', Target: data.water_target, Saved: data.water_saved_till_now },
-          { name: 'Emission', Target: data.emission_target, Saved: data.emission_saved_till_now },
-        ];
-
-        setChartData(formattedData);
-      } catch (err) {
-        console.log("error is", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) return <p>Loading chart...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  return (
-    <CustomBarChart
-      data={chartData}
-      bar1Key="Target"
-      bar1Color="#8884d8"
-      bar2Key="Saved"
-      bar2Color="#82ca9d"
-    />
-  );
-};
-
-export default ChartContainer;
+export default CustomBarChart
