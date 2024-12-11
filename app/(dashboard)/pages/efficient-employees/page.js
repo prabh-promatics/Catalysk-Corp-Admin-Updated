@@ -2,7 +2,7 @@
 import { Container, Form } from 'react-bootstrap'
 import { PageHeading } from 'widgets'
 import { useEffect, useState } from 'react'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+//import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 //import DropzoneComponent from '../../../../components/bootstrap/DropzoneComponent'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
