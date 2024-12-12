@@ -188,68 +188,11 @@ function EfficientEmployees () {
                         </div>
                       </div>
                       <div className='bttns-sec'>
-                        {/* <button
-                          className='btn btn-outline-white'
-                          onClick={showFilters}
-                        >
-                          <i className='fe fe-sliders me-2'></i> Filter
-                        </button> */}
-
-                        <button
-                          className='btnPrimary dropdown-toggle'
-                          data-bs-toggle='dropdown'
-                          aria-expanded='false'
-                        >
+                        <button className='btnPrimary '>
                           <i className='fe fe-download me-2'></i>Export
                         </button>
-                        {/* <ul className='dropdown-menu'>
-                          <li>
-                            <a
-                              className='dropdown-item'
-                              data-bs-toggle='modal'
-                              data-bs-target='#block-mddl'
-                            >
-                              Pdf
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              className='dropdown-item'
-                              data-bs-toggle='modal'
-                              data-bs-target='#unblock-mddl'
-                            >
-                              CSV
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              className='dropdown-item'
-                              data-bs-toggle='modal'
-                              data-bs-target='#delete-mddl'
-                            >
-                              Excel
-                            </a>
-                          </li>
-                        </ul> */}
                       </div>
                     </div>
-                    {/* {isVisible && (
-                      <div className='sub-filter-sec'>
-                        <div>
-                          <h4 className='mb-0'>Filters : </h4>
-                        </div>
-                        <div class='stts-flter'>
-                          <select className='form-control form-select'>
-                            <option disabled selected>
-                              Status
-                            </option>
-                            <option value='active'>Active</option>
-                            <option value='block'>Blocked</option>
-                          </select>
-                        </div>
-
-                      </div>
-                    )} */}
                   </div>
                   <div className='table-div'>
                     <div className='table-responsive'>
@@ -370,86 +313,11 @@ function EfficientEmployees () {
                         </div>
                       </div>
                       <div className='bttns-sec'>
-                        {/* <button
-                          className='btn btn-outline-white'
-                          onClick={showFilters}
-                        >
-                          <i className='fe fe-sliders me-2'></i> Filter
-                        </button> */}
-
-                        <button
-                          className='btnPrimary dropdown-toggle'
-                          data-bs-toggle='dropdown'
-                          aria-expanded='false'
-                        >
+                        <button className='btnPrimary'>
                           <i className='fe fe-download me-2'></i>Export
                         </button>
-                        {/* <ul className='dropdown-menu'>
-                          <li>
-                            <a
-                              className='dropdown-item'
-                              data-bs-toggle='modal'
-                              data-bs-target='#block-mddl'
-                            >
-                              Pdf
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              className='dropdown-item'
-                              data-bs-toggle='modal'
-                              data-bs-target='#unblock-mddl'
-                            >
-                              CSV
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              className='dropdown-item'
-                              data-bs-toggle='modal'
-                              data-bs-target='#delete-mddl'
-                            >
-                              Excel
-                            </a>
-                          </li>
-                        </ul> */}
                       </div>
                     </div>
-                    {/* {isVisible && (
-                      <div className='sub-filter-sec'>
-                        <div>
-                          <h4 className='mb-0'>Filters : </h4>
-                        </div>
-                        <div class='stts-flter'>
-                          <select className='form-control form-select'>
-                            <option disabled selected>
-                              Status
-                            </option>
-                            <option value='active'>Active</option>
-                            <option value='block'>Blocked</option>
-                          </select>
-                        </div>
-
-                        <div class='stts-flter'>
-                          <select className='form-control form-select'>
-                            <option disabled selected>
-                              Type
-                            </option>
-                            <option value='individual'>Individual</option>
-                            <option value='corporate'>Corporate</option>
-                          </select>
-                        </div>
-
-                        <div class='stts-flter'>
-                          <input
-                            className='form-control'
-                            type='date'
-                            name='start_time'
-                            onChange={e => handleInputChangenew(e)}
-                          />
-                        </div>
-                      </div>
-                    )} */}
                   </div>
                   <div className='table-div'>
                     <div className='table-responsive'>
@@ -617,49 +485,11 @@ function EfficientEmployees () {
                         </div>
                       </div>
                       <div className='bttns-sec'>
-                        {/* <button
-                          className='btn btn-outline-white'
-                          onClick={showFilters}
-                        >
-                          <i className='fe fe-sliders me-2'></i> Filter
-                        </button> */}
-
                         <button
-                          className='btnPrimary dropdown-toggle'
-                          // data-bs-toggle='dropdown'
-                          // aria-expanded='false'
+                          className='btnPrimary '
                         >
                           <i className='fe fe-download me-2'></i>Export
                         </button>
-                        {/* <ul className='dropdown-menu'>
-                          <li>
-                            <a
-                              className='dropdown-item'
-                              data-bs-toggle='modal'
-                              data-bs-target='#block-mddl'
-                            >
-                              Pdf
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              className='dropdown-item'
-                              data-bs-toggle='modal'
-                              data-bs-target='#unblock-mddl'
-                            >
-                              CSV
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              className='dropdown-item'
-                              data-bs-toggle='modal'
-                              data-bs-target='#delete-mddl'
-                            >
-                              Excel
-                            </a>
-                          </li>
-                        </ul> */}
                       </div>
                     </div>
                     {isVisible && (
@@ -998,7 +828,7 @@ function EfficientEmployees () {
               <div class='modal-body'>
                 <div className='dlt-mdl'>
                   <h5>Drop File Below:</h5>
-                 {/*  <DropzoneComponent
+                  {/*  <DropzoneComponent
                     onDrop={handleDrop}
                     acceptedFiles='.jpg,.png,.pdf'
                   /> */}

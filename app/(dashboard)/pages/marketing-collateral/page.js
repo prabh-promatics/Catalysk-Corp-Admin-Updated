@@ -107,29 +107,11 @@ function MarketingCollateral() {
                         <p className="fs-5 fw-bold">{template.name}</p>
                         <div>
                           <button
-                            className="btnPrimary dropdown-toggle"
-                            // data-bs-toggle="dropdown"
-                            // aria-expanded="false"
+                            className="btnPrimary "
                           >
                             <i className="fe fe-download me-2"></i>Export
                           </button>
-                          {/* <ul className="dropdown-menu">
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Pdf
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                CSV
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Jpg
-                              </a>
-                            </li>
-                          </ul> */}
+                          
                         </div>
                       </div>
                     </div>

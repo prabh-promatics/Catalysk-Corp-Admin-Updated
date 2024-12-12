@@ -93,7 +93,7 @@ function InvoicesManagement () {
             </div>
             {/* <div className="dropdown"> */}
             <button
-              className='btnPrimary dropdown-toggle'
+              className='btnPrimary '
               data-bs-toggle='dropdown'
               aria-expanded='false'
             >
@@ -159,17 +159,17 @@ function InvoicesManagement () {
                     </button>
 
                     <div
-                      className='btn btn-outline-white bulk-action-btn dropdown-toggle'
-                      data-bs-toggle='dropdown'
-                      aria-expanded='false'
+                      className="dropdown"
                     >
-                      <span
-                        className='dropdown-toggle'
+                      <button
+                        className='btn btn-outline-white bulk-action-btn dropdown-toggle'
                         data-bs-toggle='dropdown'
                         aria-expanded='false'
                       >
-                        <i className='fe fe-more-vertical'></i>
-                      </span>
+                        <span>
+                          <i className='fe fe-more-vertical'></i>
+                        </span>
+                      </button>
                       <ul className='dropdown-menu'>
                         <li>
                           <a
@@ -598,162 +598,6 @@ function InvoicesManagement () {
           </div>
         </div>
 
-        {/* <!--Block- Modal --> */}
-
-        <div
-          class='modal fade'
-          id='block-mddl'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Activate Employee
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h4 className='text-center'>
-                    Are you sure you want to activate this employee?
-                  </h4>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Activate
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class='modal fade'
-          id='deActivateModal'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Deactivate Employees
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h5>Drop File Below:</h5>
-                  {/* <DropzoneComponent
-                    onDrop={handleDrop}
-                    acceptedFiles='.jpg,.png,.pdf'
-                  /> */}
-                  <div className='mt-3'>
-                    <h5>Files Selected:</h5>
-                    <ul>
-                      {files.map((file, index) => (
-                        <li key={index}>{file.name}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Deactivate
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class='modal fade'
-          id='unblock-mddl'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Deactivate Employee
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h5 className=''>Enter Deactivation Date</h5>
-                </div>
-                <Form className='d-flex align-items-center'>
-                  <Form.Control
-                    type='date'
-                    placeholder='Enter Deactivation Date'
-                  />
-                </Form>
-              </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Deactivate
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </Container>
     </>
   )

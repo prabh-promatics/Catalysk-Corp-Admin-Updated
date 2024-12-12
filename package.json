@@ -45,7 +45,7 @@
     "react-bootstrap-icons": "^1.10.3",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18.2.0",
-    "react-dropzone": "^14.2.3",
+    "react-dropzone": "^14.3.5",
     "react-feather": "^2.0.10",
     "react-responsive": "^9.0.2",
     "react-syntax-highlighter": "^15.5.0",
@@ -56,5 +56,8 @@
     "simplebar": "^6.2.5",
     "simplebar-react": "^3.2.4",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10"
   }
 }

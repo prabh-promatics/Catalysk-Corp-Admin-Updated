@@ -48,12 +48,12 @@ export const DashboardMenu = [
 		icon: 'user',
 		link: '/pages/efficient-employees'
 	},
-	// {
-	// 	id: uuid(),
-	// 	title: 'Sustainability Targets',
-	// 	icon: 'crosshair',
-	// 	link: '/pages/corporate-sustainability-targets'
-	// },
+	{
+		id: uuid(),
+		title: 'Sustainability Targets',
+		icon: 'crosshair',
+		link: '/pages/corporate-sustainability-targets'
+	},
 	{
 		id: uuid(),
 		title: 'Rewards Management',

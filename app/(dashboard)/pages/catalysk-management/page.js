@@ -81,9 +81,7 @@ function CatalyskManagement () {
                 </div>
                 <div className='d-flex justify-content-center align-items-center'>
                   <button
-                    className='btnPrimary dropdown-toggle'
-                    data-bs-toggle='dropdown'
-                    aria-expanded='false'
+                    className='btnPrimary '
                   >
                     <i className='fe fe-plus me-2'></i>Add more
                   </button>
@@ -129,9 +127,7 @@ function CatalyskManagement () {
                 </div>
                 <div className='d-flex justify-content-center align-items-center'>
                   <button
-                    className='btnPrimary dropdown-toggle'
-                    data-bs-toggle='dropdown'
-                    aria-expanded='false'
+                    className='btnPrimary '
                   >
                     Save Details
                   </button>

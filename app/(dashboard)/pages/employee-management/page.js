@@ -2,13 +2,17 @@
 // import node module libraries
 import { Container, Form } from 'react-bootstrap'
 
+if (typeof window !== "undefined") {
+  require('bootstrap/dist/js/bootstrap.bundle.min.js');
+}
+
 // import widget as custom components
 import { PageHeading } from 'widgets'
 import axios from 'axios'
 
 import { useEffect, useState } from 'react'
 
-// import DropzoneComponent from '../../../../components/bootstrap/DropzoneComponent'
+import DropzoneComponent from '../../../../components/bootstrap/DropzoneComponent'
 
 // import sub components
 import Link from 'next/link'
@@ -177,9 +181,8 @@ function EmployeeManagement () {
   //   throw new Error('Authorization token not found in cookies.')
   // }
 
+  const [token, setToken] = useState('')
 
-  const [token, setToken] = useState('');
-  
   // Fetch token from cookies client-side
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -234,42 +237,9 @@ function EmployeeManagement () {
               </button>
             </div>
 
-            <button
-              className='btnPrimary dropdown-toggle'
-              //   data-bs-toggle='dropdown'
-              //   aria-expanded='false'
-            >
+            <button className='btnPrimary '>
               <i className='fe fe-download me-2'></i>Export
             </button>
-            {/* <ul className='dropdown-menu'>
-              <li>
-                <a
-                  className='dropdown-item'
-                  data-bs-toggle='modal'
-                  data-bs-target='#block-mddl'
-                >
-                  Pdf
-                </a>
-              </li>
-              <li>
-                <a
-                  className='dropdown-item'
-                  data-bs-toggle='modal'
-                  data-bs-target='#unblock-mddl'
-                >
-                  CSV
-                </a>
-              </li>
-              <li>
-                <a
-                  className='dropdown-item'
-                  data-bs-toggle='modal'
-                  data-bs-target='#delete-mddl'
-                >
-                  Excel
-                </a>
-              </li>
-            </ul> */}
           </div>
         </div>
 
@@ -301,17 +271,17 @@ function EmployeeManagement () {
                     </Link> */}
 
                     <div
-                      className='btn btn-outline-white bulk-action-btn dropdown-toggle'
-                      data-bs-toggle='dropdown'
-                      aria-expanded='false'
+                      className="dropdown"
                     >
-                      <span
-                        className='dropdown-toggle'
+                      <button
+                        className='btn btn-outline-white bulk-action-btn dropdown-toggle'
                         data-bs-toggle='dropdown'
                         aria-expanded='false'
                       >
-                        <i className='fe fe-more-vertical'></i>
-                      </span>
+                        <span>
+                          <i className='fe fe-more-vertical'></i>
+                        </span>
+                      </button>
                       <ul className='dropdown-menu'>
                         <li>
                           <a
@@ -652,10 +622,10 @@ function EmployeeManagement () {
               <div class='modal-body'>
                 <div className='dlt-mdl'>
                   <h5>Drop File Below:</h5>
-                  {/* <DropzoneComponent
+                  <DropzoneComponent
                     onDrop={handleDrop}
                     acceptedFiles='.jpg,.png,.pdf'
-                  /> */}
+                  />
                   <div className='mt-3'>
                     <h5>Files Selected:</h5>
                     <ul>
