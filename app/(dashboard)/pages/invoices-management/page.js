@@ -1,504 +1,206 @@
-'use client'
-// import node module libraries
-import { Container, Form } from 'react-bootstrap'
+'use client';
+import { useEffect, useState } from 'react';
+import { Container, Form } from 'react-bootstrap';
+import { PageHeading } from 'widgets';
+import Link from 'next/link';
 
-// import widget as custom components
-import { PageHeading } from 'widgets'
+function InvoicesManagement() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [invoices, setInvoices] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [token, setToken] = useState('');
 
-// import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import { useEffect, useState } from 'react'
-// import DropzoneComponent from '../../../../components/bootstrap/DropzoneComponent'
-
-// import sub components
-import Link from 'next/link'
-
-// hide show filters
-
-function InvoicesManagement () {
-  const [isVisible, setIsVisible] = useState(false)
-  const [users, setUsers] = useState([])
-  const [selectedItem, setselectedItem] = useState([])
-  /// Pagination
-  const [pageSize] = useState(10)
-  const [totalItems, setTotalItems] = useState(2)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [offsetentry, setoffsetentry] = useState(0)
-  const [entry, setentry] = useState(0)
-  const [search, setSearch] = useState('')
-  const showFilters = () => {
-    setIsVisible(!isVisible)
-  }
-
-  const [token, setToken] = useState('')
+  const pageSize = 10;
 
   useEffect(() => {
-    // Only runs on the client-side
-    const tokenFromLocalStorage = localStorage.getItem('token')
-    setToken(tokenFromLocalStorage || '')
-  }, [])
+    // Check if document is defined to ensure this runs on the client side
+    let token = ''
+    if (typeof document !== 'undefined') {
+      token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('authToken='))
+        ?.split('=')[1]
+      token = 'd527c719af2db07b02b744f836bd3361b4609c45bade79e1b9417641f79022e8935ac128ed40cc8fb52279e56cfcfba81f76a081753ec130ee584cbcd7ca982bd935531ea7b75952c1818d289353d00e4102e190747178277d18f51dbf804a12e49a6c67ee0905bf8627e033ce01942d37eedfeba43e1e3176695361ef523cca978eb763311d09a54b99a2ed9078d787c6ef6c1f71f0f5fc63642a433840eeb1274186f2c7f35d9e55ea4ec9681b841560856bc3abc51e2fc3590382de36960b46c19b710449258913560aa8983f3e86'
+        setToken(token || '');
+    }
+    if (!token) {
+      throw new Error('Authorization token not found in cookies.')
+    }
+    
+  }, []);
 
   useEffect(() => {
-    // getdoc();
-  }, [currentPage, search, token])
-  //  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+    if (token) {
+      fetchInvoices();
+    }
+  }, [currentPage, search, token]);
 
-  function capitalizeFirstLetter (string) {
-    return string.charAt(0).toUpperCase() + string.slice(1)
-  }
+  const fetchInvoices = async () => {
+    try {
+      const response = await fetch(
+        `https://betazone.promaticstechnologies.com/corporate/getInvoice`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (data.code === 200) {
+        setInvoices(data.data);
+        setTotalItems(data.count);
+      } else {
+        console.error('Failed to fetch invoices:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching invoices:', error);
+    }
+  };
+
+  const getInvoice = async (invoiceId) => {
+    try {
+      const response = await axios.post(
+        "https://betazone.promaticstechnologies.com/corporate/downloadPdf",
+        {
+          id: invoiceId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer d527c719af2db07b02b744f836bd3361b4609c45bade79e1b9417641f79022e8935ac128ed40cc8fb52279e56cfcfba81f76a081753ec130ee584cbcd7ca982bd935531ea7b75952c1818d289353d00e4102e190747178277d18f51dbf804a12e49a6c67ee0905bf8627e033ce01942d37eedfeba43e1e3176695361ef523cca978eb763311d09a54b99a2ed9078d787c6ef6c1f71f0f5fc63642a433840eeb1274186f2c7f35d9e55ea4ec9681b841560856bc3abc51e2fc3590382de36960b46c19b710449258913560aa8983f3e86",
+            Cookie:
+              "token=16ada7fafe6c23a0690554e6ca70da8e09c019609281212f4fa74459d0f56dc131ee6393fd757120495e3c731b9d1b19c2f8acbdc1fb959fd26d7ac6d7d462fa0926b54f0b4763a3ccdee1c08deb08518ed786405d539b349b3fa4a584b301a330b64678df30cfc407e3c72d3efd625a78228efe7feae58bfc909b8bb1afa424f624baf5baaad409cfaa6a52cbdf796601b78df6ffdb5d7d40a4688b562c5eadf04d6f80d2f4e4bd76b9ab4bb17926971acdab6e45fd64db8b264bf8ee000052",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Invoice has been sent to your email.");
+      } else {
+        alert("Failed to send the invoice.");
+      }
+    } catch (error) {
+      console.error("Error sending invoice:", error);
+      alert("An error occurred while sending the invoice.");
+    }
+  };
 
   const nextPage = () => {
-    const totalPages = Math.ceil(totalItems / pageSize)
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1)
+    if (currentPage < Math.ceil(totalItems / pageSize)) {
+      setCurrentPage(currentPage + 1);
     }
-  }
+  };
 
   const prevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1)
+      setCurrentPage(currentPage - 1);
     }
-  }
-
-  const totalPages = Math.ceil(totalItems / pageSize)
-  console.log('totalPages', totalPages, totalItems, pageSize)
-
-  const pageNumbers = []
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i)
-  }
-
-  const [value, setvalue] = useState('')
-
-  const [files, setFiles] = useState([])
-
-  const handleDrop = acceptedFiles => {
-    setFiles(acceptedFiles)
-    console.log(acceptedFiles) // Log or handle files here
-  }
+  };
 
   return (
     <>
-      <Container fluid className='p-6'>
-        {/* Page Heading */}
-        <div className='d-flex justify-content-between'>
-          <PageHeading heading='Invoices Management' />
-          <div className='d-flex items-center gap-3'>
-            <div>
-              {/* <button type="button" className="btnPrimary" >Employees Data</button> */}
-              <Link href='/pages/invoices-data' passHref>
-                <button type='button' className='btnPrimary'>
-                  Employees Data
-                </button>
-              </Link>
-            </div>
-            {/* <div className="dropdown"> */}
-            <button
-              className='btnPrimary '
-              data-bs-toggle='dropdown'
-              aria-expanded='false'
-            >
-              <i className='fe fe-download me-2'></i>Export
-            </button>
-            <ul className='dropdown-menu'>
-              <li>
-                <a
-                  // onClick={(e) => blockid(tdata._id)}
-                  className='dropdown-item'
-                  data-bs-toggle='modal'
-                  data-bs-target='#block-mddl'
-                >
-                  Pdf
-                </a>
-              </li>
-              <li>
-                <a
-                  // onClick={(e) => blockid(tdata._id)}
-                  className='dropdown-item'
-                  data-bs-toggle='modal'
-                  data-bs-target='#unblock-mddl'
-                >
-                  CSV
-                </a>
-              </li>
-              <li>
-                <a
-                  // onClick={(e) => blockid(tdata._id)}
-                  className='dropdown-item'
-                  data-bs-toggle='modal'
-                  data-bs-target='#delete-mddl'
-                >
-                  Excel
-                </a>
-              </li>
-            </ul>
-            {/* </div>sss */}
-          </div>
+      <Container fluid className="p-6">
+        <div className="d-flex justify-content-between">
+          <PageHeading heading="Invoices Management" />
         </div>
-
-        <div className='main-content-wrapper'>
-          <div className='card'>
-            <div className='card-body'>
-              <div className='filters-options-sec'>
-                <div className='flxx'>
-                  <div className='search-bar'>
-                    {/* Search Form */}
-                    <Form className='d-flex align-items-center'>
-                      <Form.Control
-                        type='search'
-                        placeholder='Search'
-                        onChange={e => setSearch(e.target.value)}
-                      />
-                    </Form>
-                  </div>
-                  <div className='bttns-sec'>
-                    <button
-                      className='btn btn-outline-white'
-                      onClick={showFilters}
-                    >
-                      <i className='fe fe-sliders me-2'></i> Filter
-                    </button>
-
-                    <div
-                      className="dropdown"
-                    >
-                      <button
-                        className='btn btn-outline-white bulk-action-btn dropdown-toggle'
-                        data-bs-toggle='dropdown'
-                        aria-expanded='false'
-                      >
-                        <span>
-                          <i className='fe fe-more-vertical'></i>
-                        </span>
-                      </button>
-                      <ul className='dropdown-menu'>
-                        <li>
-                          <a
-                            className='dropdown-item'
-                            data-bs-toggle='modal'
-                            data-bs-target='#blockall-mddl'
-                          >
-                            Export
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            className='dropdown-item'
-                            data-bs-toggle='modal'
-                            data-bs-target='#deleteall-mddl'
-                          >
-                            Delete
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+        <div className="main-content-wrapper">
+          <div className="card">
+            <div className="card-body">
+              <div className="filters-options-sec">
+                <div className="search-bar">
+                  <Form className="d-flex align-items-center">
+                    <Form.Control
+                      type="search"
+                      placeholder="Search"
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </Form>
                 </div>
-                {isVisible && (
-                  <div className='sub-filter-sec'>
-                    <div>
-                      <h4 className='mb-0'>Filters : </h4>
-                    </div>
-                    <div class='stts-flter'>
-                      <select className='form-control form-select'>
-                        <option disabled selected>
-                          Status
-                        </option>
-                        <option value='active'>Active</option>
-                        <option value='block'>Blocked</option>
-                      </select>
-                    </div>
-
-                    <div class='stts-flter'>
-                      <select className='form-control form-select'>
-                        <option disabled selected>
-                          Type
-                        </option>
-                        <option value='individual'>Individual</option>
-                        <option value='corporate'>Corporate</option>
-                      </select>
-                    </div>
-
-                    <div class='stts-flter'>
-                      <input
-                        className='form-control'
-                        type='date'
-                        name='start_time'
-                        onChange={e => handleInputChangenew(e)}
-                      />
-                    </div>
-                  </div>
-                )}
               </div>
-              <div className='table-div'>
-                <div className='table-responsive'>
-                  <table className='table table-striped'>
+              <div className="table-div">
+                <div className="table-responsive">
+                  <table className="table table-striped">
                     <thead>
                       <tr>
-                        <th scope='col'>
-                          <input type='checkbox' class='form-check-input' />
+                        <th scope="col">
+                         S.No
                         </th>
-                        <th scope='col'>Invoice Number</th>
-                        <th scope='col'>Invoice Date</th>
-                        <th scope='col'>Amount</th>
-                        <th scope='col'>Status</th>
-                        <th scope='col'>Action</th>
+                        <th scope="col">Invoice Number</th>
+                        <th scope="col">Invoice Date</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          {' '}
-                          <input
-                            type='checkbox'
-                            class='form-check-input'
-                          />{' '}
-                        </td>
-                        <td>INV-12345</td>
-                        <td>Oct 25, 2024</td>
-                        <td>$500</td>
-                        <td>
-                          <p className='text-danger'>Due: Nov 25, 2024</p>
-                        </td>
-                        <td className='action-td'>
-                          <div className='dropdown'>
-                            <span
-                              className='cstmDropdown dropdown-toggle'
-                              data-bs-toggle='dropdown'
-                              aria-expanded='false'
-                            >
-                              <i className='fe fe-more-vertical'></i>
-                            </span>
-                            <ul className='dropdown-menu'>
-                              <li>
-                                <a
-                                  className='dropdown-item'
-                                  // data-bs-toggle="modal"
-                                  // data-bs-target="#block-mddl"
+                      {invoices.length > 0 ? (
+                        invoices.map((invoice, index) => (
+                          <tr key={invoice._id}>
+                            <td>
+                              {index+1}.
+                            </td>
+                            <td>{invoice.invoice_number}</td>
+                            <td>{new Date(invoice.invoice_date).toLocaleDateString()}</td>
+                            <td>${invoice.amount}</td>
+                            <td>
+  <p
+    className={
+      invoice.status === 'pending' && new Date(invoice.invoice_date) < new Date()
+        ? 'text-danger' // Red for past due date
+        : 'text-success' // Green otherwise
+    }
+  >
+    {
+      invoice.status === 'pending' && new Date(invoice.invoice_date) < new Date()
+        ? 'Invoice Due:' // Red for past due date
+        : 'Invoice Paid:' // Green otherwise
+    } {new Date(invoice.due_date).toLocaleDateString()}
+  </p>
+</td>
+                            <td>
+                              <div className="dropdown">
+                                <span
+                                  className="cstmDropdown dropdown-toggle"
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
                                 >
-                                  Request PDF
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          {' '}
-                          <input
-                            type='checkbox'
-                            class='form-check-input'
-                          />{' '}
-                        </td>
-                        <td>INV-12345</td>
-                        <td>Oct 25, 2024</td>
-                        <td>$500</td>
-                        <td>
-                          <p className='text-success'>Paid: Oct 20, 2024</p>
-                        </td>
-                        <td className='action-td'>
-                          <div className='dropdown'>
-                            <span
-                              className='cstmDropdown dropdown-toggle'
-                              data-bs-toggle='dropdown'
-                              aria-expanded='false'
-                            >
-                              <i className='fe fe-more-vertical'></i>
-                            </span>
-                            <ul className='dropdown-menu'>
-                              <li>
-                                <a className='dropdown-item'>Request PDF</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          {' '}
-                          <input
-                            type='checkbox'
-                            class='form-check-input'
-                          />{' '}
-                        </td>
-                        <td>INV-12345</td>
-                        <td>Oct 25, 2024</td>
-                        <td>$500</td>
-                        <td>
-                          <p className='text-danger'>Due: Nov 25, 2024</p>
-                        </td>
-                        <td className='action-td'>
-                          <div className='dropdown'>
-                            <span
-                              className='cstmDropdown dropdown-toggle'
-                              data-bs-toggle='dropdown'
-                              aria-expanded='false'
-                            >
-                              <i className='fe fe-more-vertical'></i>
-                            </span>
-                            <ul className='dropdown-menu'>
-                              <li>
-                                <a
-                                  className='dropdown-item'
-                                  // data-bs-toggle="modal"
-                                  // data-bs-target="#block-mddl"
-                                >
-                                  Request PDF
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          {' '}
-                          <input
-                            type='checkbox'
-                            class='form-check-input'
-                          />{' '}
-                        </td>
-                        <td>INV-12345</td>
-                        <td>Oct 25, 2024</td>
-                        <td>$500</td>
-                        <td>
-                          <p className='text-danger'>Due: Nov 25, 2024</p>
-                        </td>
-                        <td className='action-td'>
-                          <div className='dropdown'>
-                            <span
-                              className='cstmDropdown dropdown-toggle'
-                              data-bs-toggle='dropdown'
-                              aria-expanded='false'
-                            >
-                              <i className='fe fe-more-vertical'></i>
-                            </span>
-                            <ul className='dropdown-menu'>
-                              <li>
-                                <a
-                                  className='dropdown-item'
-                                  // data-bs-toggle="modal"
-                                  // data-bs-target="#block-mddl"
-                                >
-                                  Request PDF
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          {' '}
-                          <input
-                            type='checkbox'
-                            class='form-check-input'
-                          />{' '}
-                        </td>
-                        <td>INV-12345</td>
-                        <td>Oct 25, 2024</td>
-                        <td>$500</td>
-                        <td>
-                          <p className='text-success'>Paid: Oct 20, 2024</p>
-                        </td>
-                        <td className='action-td'>
-                          <div className='dropdown'>
-                            <span
-                              className='cstmDropdown dropdown-toggle'
-                              data-bs-toggle='dropdown'
-                              aria-expanded='false'
-                            >
-                              <i className='fe fe-more-vertical'></i>
-                            </span>
-                            <ul className='dropdown-menu'>
-                              <li>
-                                <a
-                                  className='dropdown-item'
-                                  // data-bs-toggle="modal"
-                                  // data-bs-target="#block-mddl"
-                                >
-                                  Request PDF
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
+                                  <i className="fe fe-more-vertical"></i>
+                                </span>
+                                <ul className="dropdown-menu">
+                                  <li>
+                                    <a className="dropdown-item" onClick={() => getInvoice(invoice._id)}>Request Invoice</a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6" className="text-center">
+                            No invoices found.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
-                <div className='pagination-div'>
-                  <nav aria-label='...'>
-                    <ul class='pagination'>
-                      <li class='page-item disabled'>
-                        <span>
-                          <a
-                            class='page-link'
-                            onClick={prevPage}
-                            disabled={currentPage === 1}
-                          >
-                            Previous
-                          </a>
-                        </span>
+                <div className="pagination-div">
+                  <nav aria-label="Page navigation">
+                    <ul className="pagination">
+                      <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={prevPage}>
+                          Previous
+                        </button>
                       </li>
-                      {pageNumbers.map(pageNumber => {
-                        let pagetominus = 2
-                        let pagetoplus = 2
-
-                        if (currentPage == 1) {
-                          pagetominus = 1
-                          pagetoplus = 4
-                        } else if (currentPage == 2) {
-                          pagetominus = 2
-                          pagetoplus = 3
-                        } else if (currentPage == 3) {
-                          pagetominus = 3
-                          pagetoplus = 2
-                        } else if (currentPage + 1 == totalPages) {
-                          pagetominus = 3
-                          pagetoplus = 2
-                        } else if (currentPage == totalPages) {
-                          pagetominus = 4
-                          pagetoplus = 2
-                        }
-
-                        const minPage = Math.max(1, currentPage - pagetominus)
-                        const maxPage = Math.min(
-                          totalPages,
-                          currentPage + pagetoplus
-                        )
-
-                        //console.log("minPage", minPage);
-                        //console.log("maxPage", maxPage);
-
-                        if (pageNumber >= minPage && pageNumber <= maxPage) {
-                          return (
-                            <li
-                              key={pageNumber}
-                              className={`page-item ${
-                                currentPage === pageNumber ? 'active' : ''
-                              }`}
-                            >
-                              <button
-                                className={`page-link ${
-                                  currentPage === pageNumber
-                                    ? 'bg-dark text-white border-dark'
-                                    : 'text-dark'
-                                }`}
-                                onClick={() => setCurrentPage(pageNumber)}
-                              >
-                                <b>{pageNumber}</b>
-                              </button>
-                            </li>
-                          )
-                        }
-                        return null
-                      })}
-
-                      <li class='page-item'>
-                        <a class='page-link' onClick={nextPage}>
+                      <li className={`page-item ${currentPage >= Math.ceil(totalItems / pageSize) ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={nextPage}>
                           Next
-                        </a>
+                        </button>
                       </li>
                     </ul>
                   </nav>
@@ -507,100 +209,9 @@ function InvoicesManagement () {
             </div>
           </div>
         </div>
-
-        {/* modals */}
-
-        {/* <!-- Modal --> */}
-
-        <div
-          class='modal fade'
-          id='delete-mddl'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Delete User
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h4 className='text-center'>
-                    Are you sure you want to delete this user?
-                  </h4>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button type='button' class='btn btn-primary'>
-                  Delete
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class='modal fade'
-          id='deleteall-mddl'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Delete User
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h4 className='text-center'>
-                    Are you sure you want to delete users?
-                  </h4>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button type='button' class='btn btn-primary'>
-                  Delete
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </Container>
     </>
-  )
+  );
 }
 
-export default InvoicesManagement
+export default InvoicesManagement;
