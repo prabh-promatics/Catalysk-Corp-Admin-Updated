@@ -106,7 +106,7 @@ const ActiveProjects = () => {
                 <th>Total Saved</th>
                 <th>Total Potential Savings</th>
                 <th>Median</th>
-                <th>Efficiency</th>
+                <th>Reduction</th>
               </tr>
             </thead>
             <tbody>
@@ -134,10 +134,10 @@ const ActiveProjects = () => {
                   <td className="align-middle">{item.totalPotentialSavings}</td>
                   <td className="align-middle">{item.median}</td>
                   <td className="align-middle text-dark">
-                    <div className="float-start me-3">{item.progress}%</div>
+                    <div className="float-start me-3">{item.total_potential_reduction}%</div>
                     <div className="mt-2">
                       <ProgressBar
-                        now={item.progress}
+                        now={item.total_potential_reduction}
                         style={{ height: "5px" }}
                       />
                     </div>

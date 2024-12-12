@@ -33,40 +33,15 @@ function EmployeeManagement () {
   const [employees, setEmployees] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
+
+  const [loading, setLoading] = useState(false);
+
   const limit = 10
 
   const [search, setSearch] = useState('')
   const showFilters = () => {
     setIsVisible(!isVisible)
   }
-
-  // const token = document.cookie
-  //   .split('; ')
-  //   .find(row => row.startsWith('authToken='))
-  //   ?.split('=')[1]
-
-  // // Fetch employee data from the API
-  // const fetchEmployees = async page => {
-  //   try {
-  //     setIsLoading(true)
-  //     const offset = (page - 1) * limit
-  //     const response = await axios.get(
-  //       `https://betazone.promaticstechnologies.com/corporate/employeeListing?limit=${limit}&offset=${offset}&search=&date=&status=`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`
-  //         }
-  //       }
-  //     )
-  //     const { data, count } = response.data
-  //     setEmployees(data)
-  //     setTotalPages(Math.ceil(count / limit))
-  //   } catch (error) {
-  //     console.error('Error fetching employee data:', error)
-  //   } finally {
-  //     setIsLoading(false)
-  //   }
-  // }
 
   const fetchEmployees = async (page = 1) => {
     try {
@@ -106,6 +81,62 @@ function EmployeeManagement () {
     }
   }
 
+ 
+
+  const handleDeactivate = async () => {
+
+    let token = ''
+    if (typeof document !== 'undefined') {
+      token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('authToken='))
+        ?.split('=')[1]
+    }
+    if (!token) {
+      throw new Error('Authorization token not found in cookies.')
+    }
+    if (files.length === 0) {
+      alert("Please upload a file before deactivating employees.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('type', 'excel');
+    formData.append('employee', files[0]); // Assuming single file upload
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        'https://betazone.promaticstechnologies.com/corporate/bulkDeactivateUser',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert('Employees deactivated successfully.');
+
+     //   const modal = document.getElementById('deActivateModal');
+     //   const bootstrapModal = bootstrap.Modal.getInstance(modal); // Bootstrap modal API
+     //   bootstrapModal.hide();
+      } else {
+        alert('Failed to deactivate employees. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error deactivating employees:', error);
+      alert('An error occurred while deactivating employees.');
+    //  const modal = document.getElementById('deActivateModal');
+    //  const bootstrapModal = bootstrap.Modal.getInstance(modal); // Bootstrap modal API
+    //  bootstrapModal.hide();
+    } finally {
+      setLoading(false);
+    //  const modal = document.getElementById('deActivateModal');
+    //  const bootstrapModal = bootstrap.Modal.getInstance(modal); // Bootstrap modal API
+    //  bootstrapModal.hide();
+    }
+  };
   // Fetch employees on component mount
   useEffect(() => {
     fetchEmployees(1)
@@ -113,8 +144,6 @@ function EmployeeManagement () {
 
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null)
   const [deactivationReason, setDeactivationReason] = useState('')
-  const [isModalVisible, setIsModalVisible] = useState(false)
-
   const openDeactivationModal = employeeId => {
     setSelectedEmployeeId(employeeId)
     setDeactivationReason('') // Reset reason on open
@@ -170,17 +199,7 @@ function EmployeeManagement () {
     if (currentPage > 1) setCurrentPage(currentPage - 1)
   }
 
-  // let token = ''
-  // if (typeof document !== 'undefined') {
-  //   token = document.cookie
-  //     .split('; ')
-  //     .find(row => row.startsWith('authToken='))
-  //     ?.split('=')[1]
-  // }
-  // if (!token) {
-  //   throw new Error('Authorization token not found in cookies.')
-  // }
-
+  
   const [token, setToken] = useState('')
 
   // Fetch token from cookies client-side
@@ -202,9 +221,32 @@ function EmployeeManagement () {
   }, [currentPage, search, token])
   //  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
 
-  function capitalizeFirstLetter (string) {
-    return string.charAt(0).toUpperCase() + string.slice(1)
+  const exportApi = async () => {
+    try {
+      const response = await axios.get(
+        'https://betazone.promaticstechnologies.com/corporate/exportEmployee',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          responseType: 'blob' // Handle file download
+        }
+      )
+      const blob = new Blob([response.data], { type: response.headers['content-type'] })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', 'employees_data.xlsx') // Adjust file name and extension as needed
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+      alert('Employee data exported successfully!')
+    } catch (error) {
+      console.error('Error exporting data:', error)
+      alert('Failed to export data. Please try again.')
+    }
   }
+
   const totalPages = Math.ceil(totalItems / pageSize)
   console.log('totalPages', totalPages, totalItems, pageSize)
   const pageNumbers = []
@@ -237,7 +279,7 @@ function EmployeeManagement () {
               </button>
             </div>
 
-            <button className='btnPrimary '>
+            <button className='btnPrimary ' onClick={exportApi}>
               <i className='fe fe-download me-2'></i>Export
             </button>
           </div>
@@ -624,7 +666,7 @@ function EmployeeManagement () {
                   <h5>Drop File Below:</h5>
                   <DropzoneComponent
                     onDrop={handleDrop}
-                    acceptedFiles='.jpg,.png,.pdf'
+                    acceptedFiles='.xlsx'
                   />
                   <div className='mt-3'>
                     <h5>Files Selected:</h5>
@@ -636,22 +678,23 @@ function EmployeeManagement () {
                   </div>
                 </div>
               </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Deactivate...
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
+              <div className='modal-footer'>
+            <button
+              type='button'
+              className='btnPrimary'
+              onClick={handleDeactivate}
+              disabled={loading}
+            >
+              {loading ? 'Deactivating...' : 'Deactivate'}
+            </button>
+            <button
+              type='button'
+              className='btn btn-outline-white'
+              data-bs-dismiss='modal'
+            >
+              Close
+            </button>
+          </div>
             </div>
           </div>
         </div>

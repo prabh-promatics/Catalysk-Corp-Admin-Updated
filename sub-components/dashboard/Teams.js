@@ -110,9 +110,7 @@ const Teams = () => {
     <Card className='h-100'>
       <Card.Header className='bg-white py-4 d-flex justify-content-between align-items-center'>
         <h4 className='mb-0'>Savings Breakdown</h4>
-        <div>
-          <ActionMenu />
-        </div>
+       
       </Card.Header>
       {loading ? (
         <div className='text-center py-5'>
@@ -144,11 +142,11 @@ const Teams = () => {
                     </div>
                   </div>
                 </td>
-                <td className='align-middle'>{item.role}</td>
-                <td className='align-middle'>{item.cq}</td>
-                <td className='align-middle'>{item.pq}</td>
-                <td className='align-middle'>{item.cf}</td>
-                <td className='align-middle'>{item.total}</td>
+                <td className='align-middle'>{item.role ? item.role.toFixed(2) : 0}</td>
+                <td className='align-middle'>{item.cq ? item.cq.toFixed(2) : 0}</td>
+                <td className='align-middle'>{item.pq ? item.pq.toFixed(2) : 0}</td>
+                <td className='align-middle'>{item.cf ? item.cf.toFixed(2) : 0}</td>
+                <td className='align-middle'>{item.total ? item.total.toFixed(2) : 0}</td>
               </tr>
             ))}
           </tbody>

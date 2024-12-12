@@ -5,7 +5,7 @@ const DropzoneComponent = ({ onDrop, acceptedFiles }) => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: acceptedFiles,
-    multiple: true, // Allow multiple files if needed
+    multiple: false, // Allow multiple files if needed
   });
 
   return (
