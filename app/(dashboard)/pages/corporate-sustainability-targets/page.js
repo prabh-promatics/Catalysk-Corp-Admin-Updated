@@ -1,211 +1,3 @@
-// 'use client'
-// // import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-// // import 'rsuite/dist/rsuite.min.css';
-// import React, { useEffect, useState } from 'react'
-// import { Container } from 'react-bootstrap'
-// import { PageHeading } from 'widgets'
-// import Image from 'next/image'
-
-// import { Steps, Panel, Placeholder, ButtonGroup, Button } from 'rsuite'
-
-// function CorporateSustainabilityTargets () {
-//   const [step, setStep] = React.useState(0)
-//   const onChange = nextStep => {
-//     setStep(nextStep < 0 ? 0 : nextStep > 1 ? 1 : nextStep)
-//   }
-
-//   const onNext = () => onChange(step + 1)
-//   const onPrevious = () => onChange(step - 1)
-
-//   // Content for each step
-//   const stepContent = [
-//     <div>
-//       <div className='row'>
-//         <div className='col-lg-6'>
-//           <div className='targetBox'>
-//             <div className='targetImageBox'>
-//               <Image
-//                 src='/images/brand/electricity.svg'
-//                 alt='electricity-logo'
-//                 width={40}
-//                 height={40}
-//               />
-//             </div>
-//             <div>
-//               <h5 className='mb-4'>
-//                 Electricity Reduction Target{' '}
-//                 <span className='fs-5 fw-medium'>(for FY 2024-25)</span>
-//               </h5>
-//               <div class='input-group'>
-//                 <div className='form-floating is-invalid'>
-//                   <input
-//                     type='text'
-//                     className='form-control'
-//                     id='floatingInputGroup2'
-//                     placeholder='Username'
-//                     required
-//                   />
-//                   <label for='floatingInputGroup2'>Enter value</label>
-//                 </div>
-//                 <span className='input-group-text'>kWh</span>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//         <div className='col-lg-6'>
-//           <div className='targetBox'>
-//             <div className='targetImageBox'>
-//               <Image
-//                 src='/images/brand/water.svg'
-//                 alt='electricity-logo'
-//                 width={40}
-//                 height={40}
-//               />
-//             </div>
-//             <div>
-//               <h5 className='mb-4'>
-//                 Water Reduction Target{' '}
-//                 <span className='fs-5 fw-medium'>(for FY 2024-25)</span>
-//               </h5>
-//               <div class='input-group'>
-//                 <div className='form-floating is-invalid'>
-//                   <input
-//                     type='text'
-//                     className='form-control'
-//                     id='floatingInputGroup2'
-//                     placeholder='Username'
-//                     required
-//                   />
-//                   <label for='floatingInputGroup2'>Enter value</label>
-//                 </div>
-//                 <span className='input-group-text'>L</span>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>,
-//     <div>
-//       <div className='row'>
-//         <div className='col-lg-6'>
-//           <div className='targetBox'>
-//             <div className='targetImageBox'>
-//               <Image
-//                 src='/images/brand/catalysk.svg'
-//                 alt='electricity-logo'
-//                 width={40}
-//                 height={40}
-//               />
-//             </div>
-//             <div>
-//               <h5 className='mb-4'>
-//                 Target Registration Numbers{' '}
-//                 <span className='fs-5 fw-medium'>(for FY 2024-25)</span>
-//               </h5>
-//               <div class='input-group'>
-//                 <div className='form-floating is-invalid'>
-//                   <input
-//                     type='text'
-//                     className='form-control'
-//                     id='floatingInputGroup2'
-//                     placeholder='Username'
-//                     required
-//                   />
-//                   <label for='floatingInputGroup2'>
-//                     Enter target registrations
-//                   </label>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//         <div className='col-lg-6'>
-//           <div className='targetBox'>
-//             <div className='targetImageBox'>
-//               <Image
-//                 src='/images/brand/catalysk.svg'
-//                 alt='electricity-logo'
-//                 width={40}
-//                 height={40}
-//               />
-//             </div>
-//             <div>
-//               <h5 className='mb-4'>
-//                 Target Savings on Catalysk{' '}
-//                 <span className='fs-5 fw-medium'>(for FY 2024-25)</span>
-//               </h5>
-//               <div class='input-group'>
-//                 <div className='form-floating is-invalid'>
-//                   <input
-//                     type='text'
-//                     className='form-control'
-//                     id='floatingInputGroup2'
-//                     placeholder='Username'
-//                     required
-//                   />
-//                   <label for='floatingInputGroup2'>
-//                     Enter target savings (kWh, L, CO₂)
-//                   </label>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   ]
-
-//   return (
-//     <>
-//       <Container fluid className='p-6'>
-//         {/* Page Heading */}
-//         <div className='d-flex justify-content-between'>
-//           <PageHeading heading='Corporate Sustainability Targets' />
-//         </div>
-
-//         <div>
-//           <div className='mt-3'>
-//             <Steps current={step}>
-//               <Steps.Item
-//                 title='Reduction Targets'
-//                 description='Specify Reduction Targets'
-//               />
-//               <Steps.Item
-//                 title='In Progress'
-//                 description='Specify Saving Targets'
-//               />
-//             </Steps>
-//             <hr />
-//             <Panel header={`Step: ${step + 1}`}>
-//               {/* <Placeholder.Paragraph /> */}
-//               {stepContent[step]}{' '}
-//               {/* Render content based on the current step */}
-//             </Panel>
-//             <hr />
-//             <div className='d-flex justify-content-between align-items-center'>
-//               <div>
-//                 <button type='button' className='btnPrimary'>
-//                   Save
-//                 </button>
-//               </div>
-//               <ButtonGroup>
-//                 <Button onClick={onPrevious} disabled={step === 0}>
-//                   Previous
-//                 </Button>
-//                 <Button onClick={onNext} disabled={step === 1}>
-//                   Next
-//                 </Button>
-//               </ButtonGroup>
-//             </div>
-//           </div>
-//         </div>
-//       </Container>
-//     </>
-//   )
-// }
-
-// export default CorporateSustainabilityTargets
-
 'use client'
 
 import Link from 'next/link'
@@ -213,6 +5,7 @@ import { useState } from 'react'
 import { Container, Form } from 'react-bootstrap'
 import { PageHeading } from 'widgets'
 import Image from 'next/image'
+import axios from 'axios'
 
 import DropzoneComponent from '../../../../components/bootstrap/DropzoneComponent'
 
@@ -226,7 +19,6 @@ function CorporateSustainabilityTargets () {
   const [currentPage, setCurrentPage] = useState(1)
   const [offsetentry, setoffsetentry] = useState(0)
   const [entry, setentry] = useState(0)
-  const [search, setSearch] = useState('')
   const showFilters = () => {
     setIsVisible(!isVisible)
   }
@@ -260,7 +52,49 @@ function CorporateSustainabilityTargets () {
     setFiles(acceptedFiles)
     console.log(acceptedFiles) // Log or handle files here
   }
+  const [targetElectricity, setTargetElectricity] = useState('')
+  const [targetWater, setTargetWater] = useState('')
+  const [targetEmissions, setTargetEmissions] = useState('')
 
+  const handleSaveTargets = async () => {
+    let token = ''
+    if (typeof document !== 'undefined') {
+      token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('authToken='))
+        ?.split('=')[1]
+      token = 'd527c719af2db07b02b744f836bd3361b4609c45bade79e1b9417641f79022e8935ac128ed40cc8fb52279e56cfcfba81f76a081753ec130ee584cbcd7ca982bd935531ea7b75952c1818d289353d00e4102e190747178277d18f51dbf804a12e49a6c67ee0905bf8627e033ce01942d37eedfeba43e1e3176695361ef523cca978eb763311d09a54b99a2ed9078d787c6ef6c1f71f0f5fc63642a433840eeb1274186f2c7f35d9e55ea4ec9681b841560856bc3abc51e2fc3590382de36960b46c19b710449258913560aa8983f3e86'
+        //setToken(token || '');
+    }
+    if (!token) {
+      throw new Error('Authorization token not found in cookies.')
+    }
+    const data = {
+      targets: {
+        electricityReduction: targetElectricity,
+        waterReduction: targetWater,
+        emissionsReduction: targetEmissions,
+      },
+    }
+
+    try {
+      const response = await axios.put(
+        'https://betazone.promaticstechnologies.com/corporate/addTarget',
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer '+token,
+          },
+        }
+      )
+      console.log('Save successful:', response.data)
+      alert('Targets saved successfully!')
+    } catch (error) {
+      console.error('Error saving targets:', error)
+      alert('Failed to save targets. Please try again.')
+    }
+  }
   return (
     <>
       <Container fluid className='p-6'>
@@ -268,14 +102,9 @@ function CorporateSustainabilityTargets () {
         <div className='d-flex justify-content-between'>
           <PageHeading heading='Coprorate Sustainability Targets' />
           <div className='d-flex items-center gap-3'>
-            {/* <div>
-              <Link href='/pages/invoices-data' passHref>
-                <button type='button' className='btnPrimary'>
-                  Employees Data
-                </button>
-              </Link>
-            </div> */}
-            {/* <div className="dropdown"> */}
+          <button className='btnPrimary' onClick={handleSaveTargets}>
+            Save Targets
+          </button>
             <button
               className='btnPrimary '
              
@@ -358,97 +187,6 @@ function CorporateSustainabilityTargets () {
           </div>
           <div className='card'>
             <div className='card-body'>
-              <div className='filters-options-sec'>
-                <div className='flxx'>
-                  <div className='search-bar'>
-                    {/* Search Form */}
-                    <Form className='d-flex align-items-center'>
-                      <Form.Control
-                        type='search'
-                        placeholder='Search'
-                        onChange={e => setSearch(e.target.value)}
-                      />
-                    </Form>
-                  </div>
-                  <div className='bttns-sec'>
-                    <button
-                      className='btn btn-outline-white'
-                      onClick={showFilters}
-                    >
-                      <i className='fe fe-sliders me-2'></i> Filter
-                    </button>
-
-                    <div
-                      className="dropdown"
-                    >
-                      <button
-                        className='btn btn-outline-white bulk-action-btn dropdown-toggle'
-                        data-bs-toggle='dropdown'
-                        aria-expanded='false'
-                      >
-                        <span>
-                          <i className='fe fe-more-vertical'></i>
-                        </span>
-                      </button>
-                      <ul className='dropdown-menu'>
-                        <li>
-                          <a
-                            className='dropdown-item'
-                            data-bs-toggle='modal'
-                            data-bs-target='#blockall-mddl'
-                          >
-                            Export
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            className='dropdown-item'
-                            data-bs-toggle='modal'
-                            data-bs-target='#deleteall-mddl'
-                          >
-                            Delete
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                {isVisible && (
-                  <div className='sub-filter-sec'>
-                    <div>
-                      <h4 className='mb-0'>Filters : </h4>
-                    </div>
-                    <div class='stts-flter'>
-                      <select className='form-control form-select'>
-                        <option disabled selected>
-                          Status
-                        </option>
-                        <option value='active'>Active</option>
-                        <option value='block'>Blocked</option>
-                      </select>
-                    </div>
-
-                    <div class='stts-flter'>
-                      <select className='form-control form-select'>
-                        <option disabled selected>
-                          Type
-                        </option>
-                        <option value='individual'>Individual</option>
-                        <option value='corporate'>Corporate</option>
-                      </select>
-                    </div>
-
-                    <div class='stts-flter'>
-                      <input
-                        className='form-control'
-                        type='date'
-                        name='start_time'
-                        onChange={e => handleInputChangenew(e)}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
               <div className='table-div'>
                 <div className='table-responsive'>
                   <table className='table table-striped'>
@@ -486,6 +224,7 @@ function CorporateSustainabilityTargets () {
                                 id='floatingInputGroup2'
                                 placeholder='Username'
                                 required
+                                onChange={(e) => setTargetElectricity(e.target.value)}
                               />
                               <label for='floatingInputGroup2'>
                                 Enter value
@@ -516,6 +255,7 @@ function CorporateSustainabilityTargets () {
                                 id='floatingInputGroup2'
                                 placeholder='Username'
                                 required
+                                onChange={(e) => setTargetWater(e.target.value)}
                               />
                               <label for='floatingInputGroup2'>
                                 Enter value
@@ -547,6 +287,7 @@ function CorporateSustainabilityTargets () {
                                 id='floatingInputGroup2'
                                 placeholder='Username'
                                 required
+                                onChange={(e) => setTargetEmissions(e.target.value)}
                               />
                               <label for='floatingInputGroup2'>
                                 Enter value
@@ -640,252 +381,7 @@ function CorporateSustainabilityTargets () {
           </div>
         </div>
 
-        {/* modals */}
-
-        {/* <!-- Modal --> */}
-
-        <div
-          class='modal fade'
-          id='delete-mddl'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Delete User
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h4 className='text-center'>
-                    Are you sure you want to delete this user?
-                  </h4>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button type='button' class='btn btn-primary'>
-                  Delete
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class='modal fade'
-          id='deleteall-mddl'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Delete User
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h4 className='text-center'>
-                    Are you sure you want to delete users?
-                  </h4>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button type='button' class='btn btn-primary'>
-                  Delete
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* <!--Block- Modal --> */}
-
-        <div
-          class='modal fade'
-          id='block-mddl'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Activate Employee
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h4 className='text-center'>
-                    Are you sure you want to activate this employee?
-                  </h4>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Activate
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class='modal fade'
-          id='deActivateModal'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Deactivate Employees
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h5>Drop File Below:</h5>
-                  <DropzoneComponent
-                    onDrop={handleDrop}
-                    acceptedFiles='.jpg,.png,.pdf'
-                  />
-                  <div className='mt-3'>
-                    <h5>Files Selected:</h5>
-                    <ul>
-                      {files.map((file, index) => (
-                        <li key={index}>{file.name}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Deactivate
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class='modal fade'
-          id='unblock-mddl'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Deactivate Employee
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <h5 className=''>Enter Deactivation Date</h5>
-                </div>
-                <Form className='d-flex align-items-center'>
-                  <Form.Control
-                    type='date'
-                    placeholder='Enter Deactivation Date'
-                  />
-                </Form>
-              </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Deactivate
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </Container>
     </>
   )
