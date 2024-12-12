@@ -102,9 +102,7 @@ function CorporateSustainabilityTargets () {
         <div className='d-flex justify-content-between'>
           <PageHeading heading='Coprorate Sustainability Targets' />
           <div className='d-flex items-center gap-3'>
-          <button className='btnPrimary' onClick={handleSaveTargets}>
-            Save Targets
-          </button>
+         
             <button
               className='btnPrimary '
              
@@ -379,6 +377,13 @@ function CorporateSustainabilityTargets () {
               </div>
             </div>
           </div>
+
+          <div className='d-flex justify-content-center p-5 mt-3'>
+            <button className='btnPrimary' onClick={handleSaveTargets}>
+              Save Targets
+            </button>
+          </div>
+          
         </div>
 
         

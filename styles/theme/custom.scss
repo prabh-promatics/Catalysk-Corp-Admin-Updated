@@ -323,3 +323,9 @@
   .flxx .bttns-sec .dropdown .dropdown-toggle::after{
     display: none;
   }
+
+  .table.table-bordered{
+    .btnPrimary{
+      white-space: nowrap;
+    }
+  }

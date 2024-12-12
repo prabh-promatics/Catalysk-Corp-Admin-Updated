@@ -290,6 +290,8 @@ function EmployeeManagement () {
             <div className='card-body'>
               <div className='filters-options-sec'>
                 <div className='flxx'>
+                  <div className='flxx gap-3'>
+                 
                   <div className='search-bar'>
                     {/* Search Form */}
                     <Form className='d-flex align-items-center'>
@@ -300,13 +302,20 @@ function EmployeeManagement () {
                       />
                     </Form>
                   </div>
+
+                  <div class='stts-flter'>
+                      <select className='form-control form-select'>
+                        <option disabled selected>
+                          Status
+                        </option>
+                        <option value='active'>Active</option>
+                        <option value='block'>Blocked</option>
+                      </select>
+                    </div>
+                  </div>
+                  
                   <div className='bttns-sec'>
-                    <button
-                      className='btn btn-outline-white'
-                      onClick={showFilters}
-                    >
-                      <i className='fe fe-sliders me-2'></i> Filter
-                    </button>
+                 
 
                     {/* <Link className='btn btn-primary' href='/pages/add-user'>
                       Add New User
@@ -338,41 +347,7 @@ function EmployeeManagement () {
                     </div>
                   </div>
                 </div>
-                {isVisible && (
-                  <div className='sub-filter-sec'>
-                    <div>
-                      <h4 className='mb-0'>Filters : </h4>
-                    </div>
-                    <div class='stts-flter'>
-                      <select className='form-control form-select'>
-                        <option disabled selected>
-                          Status
-                        </option>
-                        <option value='active'>Active</option>
-                        <option value='block'>Blocked</option>
-                      </select>
-                    </div>
-
-                    <div class='stts-flter'>
-                      <select className='form-control form-select'>
-                        <option disabled selected>
-                          Type
-                        </option>
-                        <option value='individual'>Individual</option>
-                        <option value='corporate'>Corporate</option>
-                      </select>
-                    </div>
-
-                    <div class='stts-flter'>
-                      <input
-                        className='form-control'
-                        type='date'
-                        name='start_time'
-                        onChange={e => handleInputChangenew(e)}
-                      />
-                    </div>
-                  </div>
-                )}
+               
               </div>
               <div className='table-div'>
                 {isLoading ? (
