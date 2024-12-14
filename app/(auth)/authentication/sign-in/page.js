@@ -42,6 +42,15 @@ const SignIn = () => {
       if (response.ok && data.code === 200) {
         console.log('Data received is---', data)
         document.cookie = `authToken=${data.data.token}; path=/; expires=${new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toUTCString()}`;
+        
+        // Store company details in cookies
+      const companyData = JSON.stringify(data.data.company);
+      document.cookie = `company=${encodeURIComponent(
+        companyData
+      )}; path=/; expires=${new Date(
+        new Date().getTime() + 24 * 60 * 60 * 1000
+      ).toUTCString()}`;
+      
         router.push('/')
       } else {
         setError('Invalid credentials. Please try again.')
