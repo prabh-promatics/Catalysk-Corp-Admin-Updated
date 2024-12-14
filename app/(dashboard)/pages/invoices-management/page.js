@@ -2,6 +2,9 @@
 import { useEffect, useState } from 'react';
 import { Container, Form } from 'react-bootstrap';
 import { PageHeading } from 'widgets';
+import debounce from 'lodash.debounce'; // Install lodash if not already installed
+import { useCallback } from 'react';
+
 import Link from 'next/link';
 
 function InvoicesManagement() {
@@ -37,7 +40,7 @@ function InvoicesManagement() {
     }
   }, [currentPage, search, token]);
 
-  const fetchInvoices = async () => {
+  const fetchInvoicesold = async () => {
     try {
       const response = await fetch(
         `https://betazone.promaticstechnologies.com/corporate/getInvoice`,
@@ -59,6 +62,41 @@ function InvoicesManagement() {
       console.error('Error fetching invoices:', error);
     }
   };
+
+  const fetchInvoices = async () => {
+    try {
+      const url = new URL(
+        'https://betazone.promaticstechnologies.com/corporate/getInvoice'
+      );
+      
+      // Add search as a query parameter if it's not empty
+      if (search) {
+        url.searchParams.append('search', search);
+      }
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.code === 200) {
+        setInvoices(data.data);
+        setTotalItems(data.count);
+      } else {
+        console.error('Failed to fetch invoices:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching invoices:', error);
+    }
+  };
+  const handleSearch = useCallback(
+    debounce((value) => {
+      setSearch(value);
+    }, 300), // 300ms debounce delay
+    []
+  );
 
   const getInvoice = async (invoiceId) => {
     try {
@@ -116,7 +154,7 @@ function InvoicesManagement() {
                     <Form.Control
                       type="search"
                       placeholder="Search"
-                      onChange={(e) => setSearch(e.target.value)}
+                      onChange={(e) => handleSearch(e.target.value)}
                     />
                   </Form>
                 </div>
