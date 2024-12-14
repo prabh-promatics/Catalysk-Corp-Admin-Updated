@@ -27,8 +27,9 @@ function EmployeeManagement () {
   const [pageSize] = useState(10)
   const [totalItems, setTotalItems] = useState(2)
   const [currentPage, setCurrentPage] = useState(1)
-  const [offsetentry, setoffsetentry] = useState(0)
-  const [entry, setentry] = useState(0)
+  //const [offsetentry, setoffsetentry] = useState(0)
+  //const [entry, setentry] = useState(0)
+  const [status, setStatus] = useState(""); // State for status filter
 
   const [employees, setEmployees] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -39,11 +40,52 @@ function EmployeeManagement () {
   const limit = 10
 
   const [search, setSearch] = useState('')
-  const showFilters = () => {
-    setIsVisible(!isVisible)
-  }
-
+ 
   const fetchEmployees = async (page = 1) => {
+
+    setIsLoading(true)
+   // const offset = (page - 1) * limit
+    // Check if document is defined to ensure this runs on the client side
+    let token = ''
+    if (typeof document !== 'undefined') {
+      token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('authToken='))
+        ?.split('=')[1]
+    }
+    try {
+      setIsLoading(true);
+      const offset = (page - 1) * limit;
+
+      if (!token) {
+        throw new Error("Authorization token not found in cookies.");
+      }
+
+      const response = await fetch(
+        `https://betazone.promaticstechnologies.com/corporate/employeeListing?limit=${limit}&offset=${offset}&search=&date=&status=${status}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      const { data, count } = result;
+      setEmployees(data);
+      setTotalItems(count);
+    } catch (error) {
+      console.error("Error fetching employee data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const fetchEmployeesold = async (page = 1) => {
     try {
       setIsLoading(true)
       const offset = (page - 1) * limit
@@ -139,8 +181,8 @@ function EmployeeManagement () {
   };
   // Fetch employees on component mount
   useEffect(() => {
-    fetchEmployees(1)
-  }, [])
+    fetchEmployees(currentPage)
+  }, [currentPage, status])
 
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null)
   const [deactivationReason, setDeactivationReason] = useState('')
@@ -260,7 +302,11 @@ function EmployeeManagement () {
     setFiles(acceptedFiles)
     console.log(acceptedFiles) // Log or handle files here
   }
-
+// Handle Filter Change
+const handleStatusChange = (e) => {
+  setStatus(e.target.value); // Update status filter
+  setCurrentPage(1); // Reset to the first page
+};
   return (
     <>
       <Container fluid className='p-6'>
@@ -304,7 +350,9 @@ function EmployeeManagement () {
                   </div>
 
                   <div class='stts-flter'>
-                      <select className='form-control form-select'>
+                      <select className='form-control form-select  
+                     '  value={status}
+                     onChange={handleStatusChange}>
                         <option disabled selected>
                           Status
                         </option>

@@ -177,15 +177,7 @@ function EfficientEmployees () {
                             />
                           </Form>
                         </div>
-                        <div class='stts-flter'>
-                          <select className='form-control form-select'>
-                            <option disabled selected>
-                              Status
-                            </option>
-                            <option value='active'>Active</option>
-                            <option value='block'>Blocked</option>
-                          </select>
-                        </div>
+                       
                       </div>
                       <div className='bttns-sec'>
                         <button className='btnPrimary '>
@@ -302,15 +294,7 @@ function EfficientEmployees () {
                             />
                           </Form>
                         </div>
-                        <div class='stts-flter'>
-                          <select className='form-control form-select'>
-                            <option disabled selected>
-                              Status
-                            </option>
-                            <option value='active'>Active</option>
-                            <option value='block'>Blocked</option>
-                          </select>
-                        </div>
+                        
                       </div>
                       <div className='bttns-sec'>
                         <button className='btnPrimary'>
@@ -474,15 +458,7 @@ function EfficientEmployees () {
                             />
                           </Form>
                         </div>
-                        <div class='stts-flter'>
-                          <select className='form-control form-select'>
-                            <option disabled selected>
-                              Status
-                            </option>
-                            <option value='active'>Active</option>
-                            <option value='block'>Blocked</option>
-                          </select>
-                        </div>
+                        
                       </div>
                       <div className='bttns-sec'>
                         <button
@@ -497,15 +473,7 @@ function EfficientEmployees () {
                         <div>
                           <h4 className='mb-0'>Filters : </h4>
                         </div>
-                        <div class='stts-flter'>
-                          <select className='form-control form-select'>
-                            <option disabled selected>
-                              Status
-                            </option>
-                            <option value='active'>Active</option>
-                            <option value='block'>Blocked</option>
-                          </select>
-                        </div>
+                       
 
                         <div class='stts-flter'>
                           <select className='form-control form-select'>
