@@ -22,6 +22,7 @@ function CatalyskManagement() {
       })
         .then(response => response.json())
         .then(data => setLiaisonOfficers(data.data || []))
+        // console.log(data.data)
         .catch(console.error);
 
       // Fetch company details
@@ -33,6 +34,11 @@ function CatalyskManagement() {
         .catch(console.error);
     }
   }, []);
+
+
+
+  // console.log(liaisonOfficers)
+  // console.log(companyDetails)
 
   return (
     <>
@@ -91,7 +97,7 @@ function CatalyskManagement() {
                         readOnly
                       />
                     </div>
-                    <div className='col-lg-6 mb-3'>
+                    {/* <div className='col-lg-6 mb-3'>
                       <p className='fs-5 fw-bold mb-2'>Bank Account No.</p>
                       <Input
                          disabled
@@ -99,7 +105,7 @@ function CatalyskManagement() {
                         value={companyDetails.bank_details?.account_number || ''}
                         readOnly
                       />
-                    </div>
+                    </div> */}
                     <div className='col-lg-6 mb-3'>
                       <p className='fs-5 fw-bold mb-2'>GSTIN No.</p>
                       <Input type='text' disabled value={companyDetails.gstin || ''} readOnly />
@@ -117,6 +123,36 @@ function CatalyskManagement() {
                         value={companyDetails.registered_address || ''}
                         readOnly
                       />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className='colsContainer mb-5'>
+            <div className='colBody'>
+              <div className='colHeader mb-3'>
+                <h5>Catalysk Bank Details</h5>
+              </div>
+              <div className='colPoints'>
+                <div className='colPoint'>
+                  <div className='row'>
+                  <div className='col-lg-6 mb-3'>
+                      <p className='fs-5 fw-bold mb-2'>Bank Name</p>
+                      <Input type='text' disabled value={companyDetails.bank_details?.bank_name || ''} readOnly />
+                    </div>
+                    <div className='col-lg-6 mb-3'>
+                      <p className='fs-5 fw-bold mb-2'>Bank Account No.</p>
+                      <Input
+                         disabled
+                        type='text'
+                        value={companyDetails.bank_details?.account_number || ''}
+                        readOnly
+                      />
+                    </div>
+                    <div className='col-lg-6 mb-3'>
+                      <p className='fs-5 fw-bold mb-2'>IFSC Code</p>
+                      <Input type='text' disabled value={companyDetails.gstin || ''} readOnly />
                     </div>
                   </div>
                 </div>

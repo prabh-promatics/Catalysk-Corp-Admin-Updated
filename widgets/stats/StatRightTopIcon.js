@@ -1,7 +1,3 @@
-// Widget : Stat Style 
-// Style : Stat widget with right top icon
-
-// import node module libraries
 import PropTypes from 'prop-types';
 import { Card } from 'react-bootstrap';
 
@@ -18,10 +14,13 @@ const StatRightTopIcon = props => {
                         {info.icon}
                     </div>
                 </div>
+                
                 <div>
                     <h1 className="fw-bold">{info.value}</h1>
-                    <p className="mb-0" dangerouslySetInnerHTML={{ __html: info.statInfo}}></p>
+                    {/* <p className="mb-0" dangerouslySetInnerHTML={{ __html: info.statInfo}}></p> */}
+                    <p className="mb-0" >of total potential electricity saving /yr</p>
                 </div>
+
             </Card.Body>
         </Card>
     )

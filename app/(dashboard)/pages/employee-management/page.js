@@ -2,8 +2,8 @@
 // import node module libraries
 import { Container, Form } from 'react-bootstrap'
 
-if (typeof window !== "undefined") {
-  require('bootstrap/dist/js/bootstrap.bundle.min.js');
+if (typeof window !== 'undefined') {
+  require('bootstrap/dist/js/bootstrap.bundle.min.js')
 }
 
 // import widget as custom components
@@ -29,22 +29,20 @@ function EmployeeManagement () {
   const [currentPage, setCurrentPage] = useState(1)
   //const [offsetentry, setoffsetentry] = useState(0)
   //const [entry, setentry] = useState(0)
-  const [status, setStatus] = useState(""); // State for status filter
+  const [status, setStatus] = useState('') // State for status filter
 
   const [employees, setEmployees] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
-
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const limit = 10
 
   const [search, setSearch] = useState('')
- 
-  const fetchEmployees = async (page = 1) => {
 
+  const fetchEmployees = async (page = 1) => {
     setIsLoading(true)
-   // const offset = (page - 1) * limit
+    // const offset = (page - 1) * limit
     // Check if document is defined to ensure this runs on the client side
     let token = ''
     if (typeof document !== 'undefined') {
@@ -54,37 +52,37 @@ function EmployeeManagement () {
         ?.split('=')[1]
     }
     try {
-      setIsLoading(true);
-      const offset = (page - 1) * limit;
+      setIsLoading(true)
+      const offset = (page - 1) * limit
 
       if (!token) {
-        throw new Error("Authorization token not found in cookies.");
+        throw new Error('Authorization token not found in cookies.')
       }
 
       const response = await fetch(
         `https://betazone.promaticstechnologies.com/corporate/employeeListing?limit=${limit}&offset=${offset}&search=&date=&status=${status}`,
         {
-          method: "GET",
+          method: 'GET',
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
-      );
+      )
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.statusText}`);
+        throw new Error(`Failed to fetch data: ${response.statusText}`)
       }
 
-      const result = await response.json();
-      const { data, count } = result;
-      setEmployees(data);
-      setTotalItems(count);
+      const result = await response.json()
+      const { data, count } = result
+      setEmployees(data)
+      setTotalItems(count)
     } catch (error) {
-      console.error("Error fetching employee data:", error);
+      console.error('Error fetching employee data:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
   const fetchEmployeesold = async (page = 1) => {
     try {
       setIsLoading(true)
@@ -123,10 +121,7 @@ function EmployeeManagement () {
     }
   }
 
- 
-
   const handleDeactivate = async () => {
-
     let token = ''
     if (typeof document !== 'undefined') {
       token = document.cookie
@@ -138,14 +133,14 @@ function EmployeeManagement () {
       throw new Error('Authorization token not found in cookies.')
     }
     if (files.length === 0) {
-      alert("Please upload a file before deactivating employees.");
-      return;
+      alert('Please upload a file before deactivating employees.')
+      return
     }
 
-    const formData = new FormData();
-    formData.append('type', 'excel');
-    formData.append('employee', files[0]); // Assuming single file upload
-    setLoading(true);
+    const formData = new FormData()
+    formData.append('type', 'excel')
+    formData.append('employee', files[0]) // Assuming single file upload
+    setLoading(true)
     try {
       const response = await axios.post(
         'https://betazone.promaticstechnologies.com/corporate/bulkDeactivateUser',
@@ -153,32 +148,32 @@ function EmployeeManagement () {
         {
           headers: {
             Authorization: `Bearer ${token}`
-          },
+          }
         }
-      );
+      )
 
       if (response.status === 200) {
-        alert('Employees deactivated successfully.');
+        alert('Employees deactivated successfully.')
 
-     //   const modal = document.getElementById('deActivateModal');
-     //   const bootstrapModal = bootstrap.Modal.getInstance(modal); // Bootstrap modal API
-     //   bootstrapModal.hide();
+        //   const modal = document.getElementById('deActivateModal');
+        //   const bootstrapModal = bootstrap.Modal.getInstance(modal); // Bootstrap modal API
+        //   bootstrapModal.hide();
       } else {
-        alert('Failed to deactivate employees. Please try again.');
+        alert('Failed to deactivate employees. Please try again.')
       }
     } catch (error) {
-      console.error('Error deactivating employees:', error);
-      alert('An error occurred while deactivating employees.');
-    //  const modal = document.getElementById('deActivateModal');
-    //  const bootstrapModal = bootstrap.Modal.getInstance(modal); // Bootstrap modal API
-    //  bootstrapModal.hide();
+      console.error('Error deactivating employees:', error)
+      alert('An error occurred while deactivating employees.')
+      //  const modal = document.getElementById('deActivateModal');
+      //  const bootstrapModal = bootstrap.Modal.getInstance(modal); // Bootstrap modal API
+      //  bootstrapModal.hide();
     } finally {
-      setLoading(false);
-    //  const modal = document.getElementById('deActivateModal');
-    //  const bootstrapModal = bootstrap.Modal.getInstance(modal); // Bootstrap modal API
-    //  bootstrapModal.hide();
+      setLoading(false)
+      //  const modal = document.getElementById('deActivateModal');
+      //  const bootstrapModal = bootstrap.Modal.getInstance(modal); // Bootstrap modal API
+      //  bootstrapModal.hide();
     }
-  };
+  }
   // Fetch employees on component mount
   useEffect(() => {
     fetchEmployees(currentPage)
@@ -241,7 +236,6 @@ function EmployeeManagement () {
     if (currentPage > 1) setCurrentPage(currentPage - 1)
   }
 
-  
   const [token, setToken] = useState('')
 
   // Fetch token from cookies client-side
@@ -274,7 +268,9 @@ function EmployeeManagement () {
           responseType: 'blob' // Handle file download
         }
       )
-      const blob = new Blob([response.data], { type: response.headers['content-type'] })
+      const blob = new Blob([response.data], {
+        type: response.headers['content-type']
+      })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
@@ -302,11 +298,12 @@ function EmployeeManagement () {
     setFiles(acceptedFiles)
     console.log(acceptedFiles) // Log or handle files here
   }
-// Handle Filter Change
-const handleStatusChange = (e) => {
-  setStatus(e.target.value); // Update status filter
-  setCurrentPage(1); // Reset to the first page
-};
+  // Handle Filter Change
+  const handleStatusChange = e => {
+    setStatus(e.target.value) // Update status filter
+    setCurrentPage(1) // Reset to the first page
+  }
+
   return (
     <>
       <Container fluid className='p-6'>
@@ -337,22 +334,24 @@ const handleStatusChange = (e) => {
               <div className='filters-options-sec'>
                 <div className='flxx'>
                   <div className='flxx gap-3'>
-                 
-                  <div className='search-bar'>
-                    {/* Search Form */}
-                    <Form className='d-flex align-items-center'>
-                      <Form.Control
-                        type='search'
-                        placeholder='Search'
-                        onChange={e => setSearch(e.target.value)}
-                      />
-                    </Form>
-                  </div>
+                    <div className='search-bar'>
+                      {/* Search Form */}
+                      <Form className='d-flex align-items-center'>
+                        <Form.Control
+                          type='search'
+                          placeholder='Search'
+                          onChange={e => setSearch(e.target.value)}
+                        />
+                      </Form>
+                    </div>
 
-                  <div class='stts-flter'>
-                      <select className='form-control form-select  
-                     '  value={status}
-                     onChange={handleStatusChange}>
+                    <div class='stts-flter'>
+                      <select
+                        className='form-control form-select  
+                     '
+                        value={status}
+                        onChange={handleStatusChange}
+                      >
                         <option disabled selected>
                           Status
                         </option>
@@ -361,17 +360,13 @@ const handleStatusChange = (e) => {
                       </select>
                     </div>
                   </div>
-                  
-                  <div className='bttns-sec'>
-                 
 
+                  <div className='bttns-sec'>
                     {/* <Link className='btn btn-primary' href='/pages/add-user'>
                       Add New User
                     </Link> */}
 
-                    <div
-                      className="dropdown"
-                    >
+                    <div className='dropdown'>
                       <button
                         className='btn btn-outline-white bulk-action-btn dropdown-toggle'
                         data-bs-toggle='dropdown'
@@ -395,7 +390,6 @@ const handleStatusChange = (e) => {
                     </div>
                   </div>
                 </div>
-               
               </div>
               <div className='table-div'>
                 {isLoading ? (
@@ -408,6 +402,8 @@ const handleStatusChange = (e) => {
                           <th scope='col'>S.No.</th>
                           <th scope='col'>Employee Name</th>
                           <th scope='col'>Email</th>
+                          {/* <th scope='col'>Location of Office</th>
+                          <th scope='col'>Leaderboard Rank</th> */}
                           <th scope='col'>Last Login</th>
                           <th scope='col'>Action</th>
                         </tr>
@@ -419,6 +415,8 @@ const handleStatusChange = (e) => {
                               <td>{index + 1}.</td>
                               <td>{employee.full_name}</td>
                               <td>{employee.email}</td>
+                              {/* <td>Sample Office Location</td>
+                              <td>12</td> */}
                               <td>
                                 {new Date(
                                   employee.last_log_in
@@ -702,22 +700,22 @@ const handleStatusChange = (e) => {
                 </div>
               </div>
               <div className='modal-footer'>
-            <button
-              type='button'
-              className='btnPrimary'
-              onClick={handleDeactivate}
-              disabled={loading}
-            >
-              {loading ? 'Deactivating...' : 'Deactivate'}
-            </button>
-            <button
-              type='button'
-              className='btn btn-outline-white'
-              data-bs-dismiss='modal'
-            >
-              Close
-            </button>
-          </div>
+                <button
+                  type='button'
+                  className='btnPrimary'
+                  onClick={handleDeactivate}
+                  disabled={loading}
+                >
+                  {loading ? 'Deactivating...' : 'Deactivate'}
+                </button>
+                <button
+                  type='button'
+                  className='btn btn-outline-white'
+                  data-bs-dismiss='modal'
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
