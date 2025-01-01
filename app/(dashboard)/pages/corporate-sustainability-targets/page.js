@@ -128,7 +128,8 @@ function CorporateSustainabilityTargets () {
                 <div className='targetBox'>
                   <div className='targetImageBox'>
                     <Image
-                      src='/images/brand/catalysk.svg'
+                      // src='/images/brand/catalysk.svg'
+                       src='/images/brand/logo/newBlackCLogo.png'
                       alt='electricity-logo'
                       width={40}
                       height={40}
@@ -163,7 +164,8 @@ function CorporateSustainabilityTargets () {
                 <div className='targetBox'>
                   <div className='targetImageBox'>
                     <Image
-                      src='/images/brand/catalysk.svg'
+                      // src='/images/brand/catalysk.svg'
+                      src='/images/brand/logo/newBlackCLogo.png'
                       alt='electricity-logo'
                       width={40}
                       height={40}

@@ -73,7 +73,8 @@ const SignIn = () => {
               </Link> */}
               <Link href='/'>
                 <Image
-                  src='/images/brand/logo/logo.svg'
+                  // src='/images/brand/logo/logo.svg'
+                  src='/images/brand/logo/newBlackCatalyskLogo.png'
                   className='signInLogo mb-4'
                   alt=''
                 />

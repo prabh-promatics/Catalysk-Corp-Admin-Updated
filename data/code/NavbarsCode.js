@@ -24,7 +24,7 @@ export const DefaultNavbar = `
 export const BrandNavbar = `   
 <Navbar>
     <Navbar.Brand href="#home">
-        <Image src="/images/brand/logo/brand-logo.png" width="30" height="30" alt="" loading="lazy"/>                                        
+        <Image src="/images/brand/logo/brand-logo.svg" width="30" height="30" alt="" loading="lazy"/>                                        
     </Navbar.Brand>
 </Navbar> 
     `.trim();

@@ -27,7 +27,7 @@
     overflow-y: auto;
   }
   .navbar-brand {
-    padding: 1rem 1.5rem 1.5rem;
+    padding: 1.5rem;
     margin-right: 0px;
     display: block;
     img {
@@ -159,6 +159,6 @@
 
 
 .navbar-vertical .navbar-brand img {
-  height: 2.5rem;
-  filter: invert(1);
+  height: 3rem;
+  // filter: invert(1);
 }
