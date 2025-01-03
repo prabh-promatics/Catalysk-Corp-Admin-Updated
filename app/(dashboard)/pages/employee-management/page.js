@@ -402,8 +402,8 @@ function EmployeeManagement () {
                           <th scope='col'>S.No.</th>
                           <th scope='col'>Employee Name</th>
                           <th scope='col'>Email</th>
-                          {/* <th scope='col'>Location of Office</th>
-                          <th scope='col'>Leaderboard Rank</th> */}
+                          <th scope='col'>Location of Office</th>
+                          <th scope='col'>Leaderboard Rank</th>
                           <th scope='col'>Last Login</th>
                           <th scope='col'>Action</th>
                         </tr>
@@ -414,9 +414,9 @@ function EmployeeManagement () {
                             <tr key={employee._id}>
                               <td>{index + 1}.</td>
                               <td>{employee.full_name}</td>
-                              <td>{employee.email}</td>
-                              {/* <td>Sample Office Location</td>
-                              <td>12</td> */}
+                              <td style={{whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px'}}>{employee.email}</td>
+                              <td>Sample Office Location</td>
+                              <td>12</td>
                               <td>
                                 {new Date(
                                   employee.last_log_in
