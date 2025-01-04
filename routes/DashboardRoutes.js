@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid'
 /**
  *  All Dashboard Routes
  *
@@ -24,90 +24,85 @@ import { v4 as uuid } from 'uuid';
  */
 
 export const DashboardMenu = [
-	{
-		id: uuid(),
-		title: 'Dashboard',
-		icon: 'home',
-		link: '/'
-	},
-	{
-		id: uuid(),
-		title: 'Employee Management',
-		icon: 'user',
-		link: '/pages/employee-management'
-	},
-	{
-		id: uuid(),
-		title: 'Invoices Management',
-		icon: 'clipboard',
-		link: '/pages/invoices-management'
-	},
-	{
-		id: uuid(),
-		title: 'Efficient Employees',
-		icon: 'user',
-		link: '/pages/efficient-employees'
-	},
-	{
-		id: uuid(),
-		title: 'Sustainability Targets',
-		icon: 'crosshair',
-		link: '/pages/corporate-sustainability-targets'
-	},
-	{
-		id: uuid(),
-		title: 'Rewards Management',
-		icon: 'award',
-		link: '/pages/rewards-management'
-	},
-	{
-		id: uuid(),
-		title: 'Marketing Collateral',
-		icon: 'download',
-		link: '/pages/marketing-collateral'
-	},
-/* 	{
-		id: uuid(),
-		title: 'Admin Management',
-		icon: 'user-check',
-		link: '/pages/admin-management'
-	}, */
-	{
-		id: uuid(),
-		title: 'Catalysk Management',
-		icon: 'user',
-		link: '/pages/catalysk-management'
-	},
+  {
+    id: uuid(),
+    title: 'Dashboard',
+    icon: 'home',
+    link: '/'
+  },
+  {
+    id: uuid(),
+    title: 'Employee Management',
+    icon: 'user',
+    link: '/pages/employee-management'
+  },
+  {
+    id: uuid(),
+    title: 'Invoices Management',
+    icon: 'clipboard',
+    link: '/pages/invoices-management'
+  },
+  {
+    id: uuid(),
+    title: 'Efficient Employees',
+    icon: 'user',
+    link: '/pages/efficient-employees'
+  },
+  {
+    id: uuid(),
+    title: 'Sustainability Targets',
+    icon: 'crosshair',
+    link: '/pages/corporate-sustainability-targets'
+  },
+  {
+    id: uuid(),
+    title: 'Rewards Management',
+    icon: 'award',
+    link: '/pages/rewards-management'
+  },
+  {
+    id: uuid(),
+    title: 'Marketing Collateral',
+    icon: 'download',
+    link: '/pages/marketing-collateral'
+  },
+  {
+    id: uuid(),
+    title: 'Admin Management',
+    icon: 'user-check',
+    link: '/pages/admin-management'
+  },
+  {
+    id: uuid(),
+    title: 'Catalysk Management',
+    icon: 'user',
+    link: '/pages/catalysk-management'
+  }
 
+  // {
+  // 	id: uuid(),
+  // 	title: 'LAYOUTS & PAGES',
+  // 	grouptitle: true
+  // },
+  // {
+  // 	id: uuid(),
+  // 	title: 'Pages',
+  // 	icon: 'layers',
+  // 	children: [
+  // 		{ id: uuid(), link: '/pages/profile', name: 'Profile' },
+  // 		{ id: uuid(), link: '/pages/settings', name: 'Settings'},
+  // 		{ id: uuid(), link: '/pages/billing', name: 'Billing' },
+  // 		{ id: uuid(), link: '/pages/pricing', name: 'Pricing'},
+  // 		{ id: uuid(), link: '/not-found', name: '404 Error' }
+  // 	]
+  // },
 
+  // {
+  // 	id: uuid(),
+  // 	title: 'Layouts',
+  // 	icon: 'layout',
+  // 	link: '/layout-vertical'
+  // },
+]
 
-	
-	// {
-	// 	id: uuid(),
-	// 	title: 'LAYOUTS & PAGES',
-	// 	grouptitle: true
-	// },
-	// {
-	// 	id: uuid(),
-	// 	title: 'Pages',
-	// 	icon: 'layers',
-	// 	children: [
-	// 		{ id: uuid(), link: '/pages/profile', name: 'Profile' },
-	// 		{ id: uuid(), link: '/pages/settings', name: 'Settings'},
-	// 		{ id: uuid(), link: '/pages/billing', name: 'Billing' },
-	// 		{ id: uuid(), link: '/pages/pricing', name: 'Pricing'},
-	// 		{ id: uuid(), link: '/not-found', name: '404 Error' }
-	// 	]
-	// },	
-	
-	// {
-	// 	id: uuid(),
-	// 	title: 'Layouts',
-	// 	icon: 'layout',
-	// 	link: '/layout-vertical'
-	// },	
-	
-	
-];
-
-export default DashboardMenu;
+export default DashboardMenu

@@ -456,15 +456,7 @@ function EmployeeManagement () {
                                         Deactivate
                                       </a>
                                     </li>
-                                    {/* <li>
-                                      <a
-                                        className='dropdown-item'
-                                        data-bs-toggle='modal'
-                                        data-bs-target='#delete-mddl'
-                                      >
-                                        Delete
-                                      </a>
-                                    </li> */}
+                                    
                                   </ul>
                                 </div>
                               </td>
