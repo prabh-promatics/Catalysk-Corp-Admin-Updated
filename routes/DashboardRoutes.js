@@ -68,7 +68,7 @@ export const DashboardMenu = [
   },
   {
     id: uuid(),
-    title: 'Admin Management',
+    title: 'Corporate Settings',
     icon: 'user-check',
     link: '/pages/admin-management'
   },
