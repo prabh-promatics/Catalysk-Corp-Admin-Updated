@@ -416,7 +416,7 @@ function EmployeeManagement () {
                               <td>{employee.full_name}</td>
                               <td style={{whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '200px'}}>{employee.email}</td>
                               <td>Sample Office Location</td>
-                              <td>12</td>
+                              <td>#{employee.leaderboard_rank}</td>
                               <td>
                                 {new Date(
                                   employee.last_log_in

@@ -1,63 +1,235 @@
 'use client'
 // import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import { useEffect, useState } from 'react'
-import { Container, Form, Card } from 'react-bootstrap'
+import { Container, Form, Card, Modal, Button } from 'react-bootstrap'
 import { Input } from 'rsuite'
 import { PageHeading } from 'widgets'
 
 if (typeof window !== 'undefined') {
   require('bootstrap/dist/js/bootstrap.bundle.min.js')
 }
-
-import Tab from 'react-bootstrap/Tab'
-import Tabs from 'react-bootstrap/Tabs'
-
-function AdminManagement () {
+function AdminManagement() {
   const [isVisible, setIsVisible] = useState(false)
 
   const [pageSize] = useState(10)
   const [totalItems, setTotalItems] = useState(2)
   const [currentPage, setCurrentPage] = useState(1)
+  const [buildings, setBuildings] = useState([]);
+  const [ips, setIps] = useState([]);
+  const [domain, setDomain] = useState('');
 
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    address: '',
+    zip_code: ''
+  });
   const [search, setSearch] = useState('')
   const showFilters = () => {
     setIsVisible(!isVisible)
   }
 
+  const isValidFQDN = (domain) => {
+    const fqdnRegex = /^(?=.{1,253}$)((?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,}$/;
+    return fqdnRegex.test(domain.trim());
+  };
+
   const [token, setToken] = useState('')
-
   useEffect(() => {
-    const tokenFromLocalStorage = localStorage.getItem('token')
-    setToken(tokenFromLocalStorage || '')
-  }, [])
-
-  useEffect(() => {}, [currentPage, search, token])
-
-  function capitalizeFirstLetter (string) {
-    return string.charAt(0).toUpperCase() + string.slice(1)
-  }
-
-  const nextPage = () => {
-    const totalPages = Math.ceil(totalItems / pageSize)
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1)
+    if (typeof document !== 'undefined') {
+      const tokenFromCookies = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('authToken='))
+        ?.split('=')[1];
+      setToken(tokenFromCookies);
     }
-  }
+  }, []);
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1)
+  // Fetch buildings whenever relevant state changes
+  useEffect(() => {
+    fetchBuildings();
+    fetchDomains();
+  }, [currentPage, search, token]);
+
+  const fetchBuildings = async () => {
+    const url = `https:betazone.promaticstechnologies.com/corporate/listBuildings`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      const response = await fetch(url, { headers });
+      if (response.ok) {
+        const result = await response.json();
+        setBuildings(result.buildings);
+        setTotalItems(result.totalItems);
+      } else {
+        console.error('Failed to fetch buildings');
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
-  }
+  };
 
-  const totalPages = Math.ceil(totalItems / pageSize)
-  console.log('totalPages', totalPages, totalItems, pageSize)
+  const fetchDomains = async () => {
+    const url = `https:betazone.promaticstechnologies.com/corporate/getDomains`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      const response = await fetch(url, { headers });
+      if (response.ok) {
+        const result = await response.json();
+        setIps(result.domains);
+        //setTotalItems(result.totalItems);
+      } else {
+        console.error('Failed to fetch buildings');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
-  const pageNumbers = []
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i)
-  }
+  const handleAddBuilding = async () => {
+    const url = 'https:betazone.promaticstechnologies.com/corporate/createBuilding';
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(formData),
+      });
 
+      if (response.ok) {
+        alert('Building added successfully!');
+        setFormData({ name: '', address: '', zipCode: '', assignedAdmin: '' });
+        fetchBuildings(); // Refresh the list
+        setShowModal(false); // Close the modal
+      } else {
+        alert('Error adding building');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while adding the building');
+    }
+  };
+
+  const handleAddDomain = async () => {
+    const trimmedDomain = domain.trim();
+
+    // Check for blank input
+    if (!trimmedDomain) {
+      alert("Please enter a valid email domain.");
+      return;
+    }
+
+    // Validate FQDN
+    if (!isValidFQDN(trimmedDomain)) {
+      alert("Please enter a valid Fully Qualified Domain Name (FQDN).");
+      return;
+    }
+
+    const domainData = { domain }
+    const url = 'https:betazone.promaticstechnologies.com/corporate/addDomain';
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(domainData),
+      });
+
+      if (response.ok) {
+        alert('Domain whitelisted successfully!');
+        setDomain('')
+        fetchDomains(); // Refresh the list
+        // setShowModal(false); // Close the modal
+      } else {
+        alert('Error adding building');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while adding the building');
+    }
+  };
+
+  const handleDeleteDomain = async (domainId) => {
+ // Ask for confirmation
+      const isConfirmed = window.confirm("Are you sure you want to delete this domain?");
+      if (!isConfirmed) {
+        return; // Exit if the user cancels
+      }
+    const domainData = { domainId }
+    const url = 'https:betazone.promaticstechnologies.com/corporate/deleteDomain';
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(domainData),
+      });
+
+      if (response.ok) {
+        alert('Domain Deleted successfully!');
+        setDomain('')
+        fetchDomains(); // Refresh the list
+        // setShowModal(false); // Close the modal
+      } else {
+        alert('Error adding building');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while adding the building');
+    }
+  };
+
+  const handleDeleteBuilding = async (buildingId) => {
+    // Ask for confirmation
+         const isConfirmed = window.confirm("Are you sure you want to delete this building?");
+         if (!isConfirmed) {
+           return; // Exit if the user cancels
+         }
+       const buildingData = { buildingId }
+       const url = 'https:betazone.promaticstechnologies.com/corporate/deleteBuilding';
+       const headers = {
+         Authorization: `Bearer ${token}`,
+         'Content-Type': 'application/json',
+       };
+       try {
+         const response = await fetch(url, {
+           method: 'POST',
+           headers,
+           body: JSON.stringify(buildingData),
+         });
+   
+         if (response.ok) {
+           alert('Building Deleted successfully!');
+           //setDomain('')
+           fetchBuildings(); // Refresh the list
+           // setShowModal(false); // Close the modal
+         } else {
+           alert('Error deleting building');
+         }
+       } catch (error) {
+         console.error('Error:', error);
+         alert('An error occurred while adding the building');
+       }
+     };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   return (
     <>
       <Container fluid className='p-6'>
@@ -66,56 +238,24 @@ function AdminManagement () {
           <PageHeading heading='Corporate Settings' />
         </div>
 
-        
+
 
         <div className='main-content-wrapper'>
-          <Card className='mb-5'>
-            <div className='myFilterOptions'>
-              <div className='myFilters align-items-end justify-content-between'>
-                <div class='my-stts-flter'>
-                  {/* <input type="search" placeholder='Search Templates'/> */}
-                  <p className='fs-5 fw-bold mb-2'>Whitelisted Email Domains</p>
-                  <input
-                    type='text'
-                    class='form-control'
-                    id='exampleFormControlInput1'
-                    placeholder='Enter Whitelisted Email Domain'
-                  />
-                </div>
-                <button className='btnPrimary'>
-                  <i className='fe fe-plus me-2'></i>Add More
-                </button>
-              </div>
-            </div>
-          </Card>
-
           <div className='card mb-4'>
             <div className='card-body'>
               <div className='filters-options-sec'>
                 <div className='flxx'>
-                  <div className='search-bar'>
-                    {/* Search Form */}
-                    <Form className='d-flex align-items-center'>
-                      <Form.Control
-                        type='search'
-                        placeholder='Search'
-                        onChange={e => setSearch(e.target.value)}
-                      />
-                    </Form>
-                  </div>
+
                   <div className='bttns-sec'>
-                    <button
-                      className='btn btn-outline-white'
-                      onClick={showFilters}
-                    >
-                      <i className='fe fe-sliders me-2'></i> Filter
-                    </button>
+
 
                     <button
                       className='btnPrimary'
-                      data-bs-toggle='modal'
-                      data-bs-target='#addBuilding'
+                      // data-bs-toggle='modal'
+                      // data-bs-target='#addBuilding'
+                      onClick={() => setShowModal(true)}
                     >
+
                       <i className='fe fe-plus me-2'></i>Add New Building
                     </button>
                   </div>
@@ -161,396 +301,149 @@ function AdminManagement () {
                   <table className='table table-striped'>
                     <thead>
                       <tr>
-                        <th scope='col'>
-                          <input type='checkbox' class='form-check-input' />
-                        </th>
+
                         <th scope='col'> Name</th>
                         <th scope='col'>Address</th>
                         <th scope='col'>Zip Code</th>
-                        <th scope='col'>Assigned Admin</th>
                         <th scope='col'>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          {' '}
-                          <input
-                            type='checkbox'
-                            class='form-check-input'
-                          />{' '}
-                        </td>
-                        <td>HQ, New York</td>
-                        <td>123 Main St, New York, NY</td>
-                        <td>10001</td>
-                        <td>John Doe</td>
-                        <td className='action-td'>
-                          <div className='dropdown'>
-                            <span
-                              className='cstmDropdown dropdown-toggle'
-                              data-bs-toggle='dropdown'
-                              aria-expanded='false'
+                      {buildings.map((building) => (
+                        <tr key={building._id}>
+                          <td>{building.name}</td>
+                          <td>{building.address}</td>
+                          <td>{building.zip_code}</td>
+                          <td>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => handleDeleteBuilding(building._id)}
                             >
-                              <i className='fe fe-more-vertical'></i>
-                            </span>
-                            <ul className='dropdown-menu'>
-                              <li>
-                                <a className='dropdown-item'>Delete</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          {' '}
-                          <input
-                            type='checkbox'
-                            class='form-check-input'
-                          />{' '}
-                        </td>
-                        <td>Regional, Los Angeles</td>
-                        <td>456 West St, LA, CA</td>
-                        <td>90001</td>
-                        <td>Jane Smith</td>
-                        <td className='action-td'>
-                          <div className='dropdown'>
-                            <span
-                              className='cstmDropdown dropdown-toggle'
-                              data-bs-toggle='dropdown'
-                              aria-expanded='false'
-                            >
-                              <i className='fe fe-more-vertical'></i>
-                            </span>
-                            <ul className='dropdown-menu'>
-                              <li>
-                                <a className='dropdown-item'>Delete</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          {' '}
-                          <input
-                            type='checkbox'
-                            class='form-check-input'
-                          />{' '}
-                        </td>
-                        <td>HQ, New York</td>
-                        <td>123 Main St, New York, NY</td>
-                        <td>10001</td>
-                        <td>John Doe</td>
-                        <td className='action-td'>
-                          <div className='dropdown'>
-                            <span
-                              className='cstmDropdown dropdown-toggle'
-                              data-bs-toggle='dropdown'
-                              aria-expanded='false'
-                            >
-                              <i className='fe fe-more-vertical'></i>
-                            </span>
-                            <ul className='dropdown-menu'>
-                              <li>
-                                <a className='dropdown-item'>Delete</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          {' '}
-                          <input
-                            type='checkbox'
-                            class='form-check-input'
-                          />{' '}
-                        </td>
-                        <td>HQ, New York</td>
-                        <td>123 Main St, New York, NY</td>
-                        <td>10001</td>
-                        <td>John Doe</td>
-                        <td className='action-td'>
-                          <div className='dropdown'>
-                            <span
-                              className='cstmDropdown dropdown-toggle'
-                              data-bs-toggle='dropdown'
-                              aria-expanded='false'
-                            >
-                              <i className='fe fe-more-vertical'></i>
-                            </span>
-                            <ul className='dropdown-menu'>
-                              <li>
-                                <a className='dropdown-item'>Delete</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
-                <div className='pagination-div'>
-                  <nav aria-label='...'>
-                    <ul class='pagination'>
-                      <li class='page-item disabled'>
-                        <span>
-                          <a
-                            class='page-link'
-                            onClick={prevPage}
-                            disabled={currentPage === 1}
-                          >
-                            Previous
-                          </a>
-                        </span>
-                      </li>
-                      {pageNumbers.map(pageNumber => {
-                        let pagetominus = 2
-                        let pagetoplus = 2
 
-                        if (currentPage == 1) {
-                          pagetominus = 1
-                          pagetoplus = 4
-                        } else if (currentPage == 2) {
-                          pagetominus = 2
-                          pagetoplus = 3
-                        } else if (currentPage == 3) {
-                          pagetominus = 3
-                          pagetoplus = 2
-                        } else if (currentPage + 1 == totalPages) {
-                          pagetominus = 3
-                          pagetoplus = 2
-                        } else if (currentPage == totalPages) {
-                          pagetominus = 4
-                          pagetoplus = 2
-                        }
-
-                        const minPage = Math.max(1, currentPage - pagetominus)
-                        const maxPage = Math.min(
-                          totalPages,
-                          currentPage + pagetoplus
-                        )
-
-                        //console.log("minPage", minPage);
-                        //console.log("maxPage", maxPage);
-
-                        if (pageNumber >= minPage && pageNumber <= maxPage) {
-                          return (
-                            <li
-                              key={pageNumber}
-                              className={`page-item ${
-                                currentPage === pageNumber ? 'active' : ''
-                              }`}
-                            >
-                              <button
-                                className={`page-link ${
-                                  currentPage === pageNumber
-                                    ? 'bg-dark text-white border-dark'
-                                    : 'text-dark'
-                                }`}
-                                onClick={() => setCurrentPage(pageNumber)}
-                              >
-                                <b>{pageNumber}</b>
-                              </button>
-                            </li>
-                          )
-                        }
-                        return null
-                      })}
-
-                      <li class='page-item'>
-                        <a class='page-link' onClick={nextPage}>
-                          Next
-                        </a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
               </div>
             </div>
           </div>
-          
+
+        </div>
+
+
+        <div className='main-content-wrapper'>
+          <div className='card mb-4'>
+            <div className='card-body'>
+              <div className='filters-options-sec'>
+                <Card className='mb-5'>
+                  <div className='myFilterOptions'>
+                    <div className='myFilters align-items-end'>
+                      <div class='my-stts-flter'>
+                        {/* <input type="search" placeholder='Search Templates'/> */}
+                        <p className='fs-5 fw-bold mb-2'>Whitelisted Email Domains</p>
+                        <input
+                          type="text"
+                          value={domain}
+                          className="form-control"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Whitelisted Email Domain"
+                          onChange={(e) => setDomain(e.target.value)} // Update domain on input change
+                        />
+                      </div>
+                      <button className='btnPrimary' onClick={handleAddDomain}>
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </Card>
+
+              </div>
+              <div className='table-div'>
+                <div className='table-responsive'>
+                  <table className='table table-striped'>
+                    <thead>
+                      <tr>
+
+                        <th scope='col'> S.No</th>
+                        <th scope='col'>Whitelisted Domain</th>
+                        <th scope='col'>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ips.map((ip, index) => (
+                        <tr key={ip?._id}>
+                          <td>{index + 1}.</td>
+                          <td>{ip?.domain}</td>
+
+                          <td>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => handleDeleteDomain(ip?._id)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
         </div>
         {/* modals */}
 
-        <div
-          class='modal fade'
-          id='addAdmin'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Invite New Admin
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <p className='fs-5 fw-bold mb-2'>Enter Corporate Email</p>
-                  <Input
-                    type='email'
-                    placeholder='Enter Corporate Email'
-                    className='mb-3'
-                  />
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Send Invite
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class='modal fade'
-          id='addBuilding'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Add New Building
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <div className='mb-4'>
-                    <p className='fs-5 fw-bold mb-2'>Enter Name</p>
-                    <Input type='email' placeholder='Enter Name' />
-                  </div>
-                  <div className='mb-4'>
-                    <p className='fs-5 fw-bold mb-2'>Enter Address</p>
-                    <Input
-                      as='textarea'
-                      rows={3}
-                      placeholder='Enter Address'
-                    />{' '}
-                  </div>
-                  <div className='mb-4'>
-                    <p className='fs-5 fw-bold mb-2'>Enter Zip Code</p>
-                    <Input type='email' placeholder='Enter Zip Code' />
-                  </div>
-                  <div className='mb-4'>
-                    <p className='fs-5 fw-bold mb-2'>Assigned Admin</p>
-                    <select className='form-control form-select'>
-                      <option disabled selected>
-                        Select Assigned Admin
-                      </option>
-                      <option value='active'>John Doe</option>
-                      <option value='block'>Jane Smith</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Add Building
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class='modal fade'
-          id='addDepartment'
-          tabindex='-1'
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h1 class='modal-title fs-4' id='exampleModalLabel'>
-                  Add New Department
-                </h1>
-                <button
-                  type='button'
-                  class='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                ></button>
-              </div>
-              <div class='modal-body'>
-                <div className='dlt-mdl'>
-                  <div className='mb-4'>
-                    <p className='fs-5 fw-bold mb-2'>Enter Department Name</p>
-                    <Input type='email' placeholder='Enter Name' />
-                  </div>
-                  <div className='mb-4'>
-                    <p className='fs-5 fw-bold mb-2'>Assigned Admin</p>
-                    <select className='form-control form-select'>
-                      <option disabled selected>
-                        Select Assigned Admin
-                      </option>
-                      <option value='active'>John Doe</option>
-                      <option value='block'>Jane Smith</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class='modal-footer'>
-                <button
-                  type='button'
-                  class='btnPrimary'
-                  data-bs-dismiss='modal'
-                >
-                  Add Department
-                </button>
-                <button
-                  type='button'
-                  class='btn btn-outline-white'
-                  data-bs-dismiss='modal'
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add New Building</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Address</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Zip Code</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="zip_code"
+                  value={formData.zipCode}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleAddBuilding}>
+              Add Building
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </>
   )

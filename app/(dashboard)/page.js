@@ -56,7 +56,7 @@ const Home = () => {
             {
               id: 1,
               title: 'Total Employees',
-              value: employee_count.total_employee,
+              value: employee_count.total_employee_login,
               icon: <People size={18} />,
               statInfo: `<span className="text-dark me-2">${employee_count.total_employee_login}</span> Logged In`
             },
